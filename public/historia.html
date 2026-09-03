@@ -139,6 +139,39 @@
         <p id="mensaje-error-form" class="mensaje-error" hidden></p>
       </form>
     </section>
+
+    <section id="seccion-cierre" class="tarjeta" hidden>
+      <h2>Cierre de la consulta</h2>
+
+      <div>
+        <h3 style="font-size:1rem; color:var(--azul-oscuro);">Fórmula óptica</h3>
+        <div class="fila-botones-cierre">
+          <button type="button" id="btn-descargar-formula">Descargar PDF</button>
+          <button type="button" id="btn-enviar-whatsapp" class="boton-secundario">Enviar por WhatsApp</button>
+          <button type="button" id="btn-enviar-correo" class="boton-secundario">Enviar por correo</button>
+        </div>
+        <p id="mensaje-envio" class="mensaje-exito" hidden></p>
+        <p id="mensaje-envio-error" class="mensaje-error" hidden></p>
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <h3 style="font-size:1rem; color:var(--azul-oscuro);">Consentimiento informado</h3>
+        <div id="bloque-consentimiento-pendiente">
+          <p id="texto-consentimiento" class="texto-consentimiento"></p>
+          <label>El paciente firma aquí (con el dedo o el mouse)</label>
+          <canvas id="lienzo-firma" class="lienzo-firma" width="600" height="180"></canvas>
+          <div class="fila-botones-cierre">
+            <button type="button" id="btn-limpiar-firma" class="boton-secundario">Limpiar</button>
+            <button type="button" id="btn-guardar-firma">Guardar firma</button>
+          </div>
+          <p id="mensaje-firma-error" class="mensaje-error" hidden></p>
+        </div>
+        <div id="bloque-consentimiento-firmado" hidden>
+          <p class="mensaje-exito">Consentimiento firmado correctamente.</p>
+          <button type="button" id="btn-descargar-consentimiento" class="boton-secundario">Descargar PDF del consentimiento</button>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script src="/js/api.js"></script>

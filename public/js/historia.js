@@ -17,6 +17,8 @@ if (!pacienteId) {
 }
 
 let diagnosticosSeleccionados = [];
+let pacienteActual = null;
+let historiaActualId = null;
 
 function calcularEdad(fechaNacimiento) {
   if (!fechaNacimiento) return null;
@@ -31,6 +33,7 @@ function calcularEdad(fechaNacimiento) {
 async function cargarPaciente() {
   try {
     const paciente = await apiFetch(`/api/pacientes/${pacienteId}`);
+    pacienteActual = paciente;
     const edad = calcularEdad(paciente.fecha_nacimiento);
     document.getElementById('tarjeta-paciente').innerHTML = `
       <h1>${paciente.nombre_completo}</h1>
@@ -151,12 +154,13 @@ document.getElementById('form-historia').addEventListener('submit', async (e) =>
   }
 
   try {
-    await apiFetch('/api/historias', { method: 'POST', body: JSON.stringify(payload) });
+    const historia = await apiFetch('/api/historias', { method: 'POST', body: JSON.stringify(payload) });
     exitoEl.hidden = false;
     e.target.reset();
     diagnosticosSeleccionados = [];
     renderChips();
     cargarHistorial();
+    iniciarCierreConsulta(historia.id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (error) {
     errorEl.textContent = error.message;
@@ -164,6 +168,194 @@ document.getElementById('form-historia').addEventListener('submit', async (e) =>
   }
 });
 
+// --- Cierre de consulta: fórmula (descarga/envío) + firma del consentimiento ---
+
+async function descargarPdf(path, nombreArchivo) {
+  const token = getToken();
+  const res = await fetch(path, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'No se pudo generar el PDF');
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const enlace = document.createElement('a');
+  enlace.href = url;
+  enlace.download = nombreArchivo;
+  document.body.appendChild(enlace);
+  enlace.click();
+  enlace.remove();
+  URL.revokeObjectURL(url);
+}
+
+function formatearNumeroWhatsapp(telefono) {
+  const soloDigitos = (telefono || '').replace(/\D/g, '');
+  if (!soloDigitos) return null;
+  if (soloDigitos.startsWith('57') && soloDigitos.length >= 12) return soloDigitos;
+  if (soloDigitos.length === 10) return `57${soloDigitos}`;
+  return soloDigitos;
+}
+
+function mostrarMensajeEnvio(texto, esError) {
+  const okEl = document.getElementById('mensaje-envio');
+  const errEl = document.getElementById('mensaje-envio-error');
+  okEl.hidden = true;
+  errEl.hidden = true;
+  if (esError) {
+    errEl.textContent = texto;
+    errEl.hidden = false;
+  } else {
+    okEl.textContent = texto;
+    okEl.hidden = false;
+  }
+}
+
+document.getElementById('btn-descargar-formula').addEventListener('click', async () => {
+  try {
+    await descargarPdf(`/api/historias/${historiaActualId}/formula.pdf`, `formula-${pacienteActual?.numero_documento ?? 'paciente'}.pdf`);
+  } catch (error) {
+    mostrarMensajeEnvio(error.message, true);
+  }
+});
+
+document.getElementById('btn-enviar-whatsapp').addEventListener('click', async () => {
+  const numero = formatearNumeroWhatsapp(pacienteActual?.telefono);
+  if (!numero) {
+    mostrarMensajeEnvio('Este paciente no tiene un teléfono registrado.', true);
+    return;
+  }
+  try {
+    await descargarPdf(`/api/historias/${historiaActualId}/formula.pdf`, `formula-${pacienteActual?.numero_documento ?? 'paciente'}.pdf`);
+    const mensaje = encodeURIComponent(
+      `Hola ${pacienteActual?.nombre_completo ?? ''}, te compartimos tu fórmula óptica. Adjuntamos el PDF que se acaba de descargar.`
+    );
+    window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank');
+    mostrarMensajeEnvio('Se descargó el PDF y se abrió WhatsApp — adjunta el archivo descargado en el chat.', false);
+  } catch (error) {
+    mostrarMensajeEnvio(error.message, true);
+  }
+});
+
+document.getElementById('btn-enviar-correo').addEventListener('click', async () => {
+  const correoSugerido = pacienteActual?.correo || '';
+  const correo = window.prompt('¿A qué correo enviamos la fórmula?', correoSugerido);
+  if (!correo) return;
+
+  try {
+    await apiFetch(`/api/historias/${historiaActualId}/enviar-correo`, {
+      method: 'POST',
+      body: JSON.stringify({ correoDestino: correo }),
+    });
+    mostrarMensajeEnvio(`Fórmula enviada a ${correo}.`, false);
+  } catch (error) {
+    mostrarMensajeEnvio(error.message, true);
+  }
+});
+
+// --- Firma del consentimiento informado ---
+
+const lienzo = document.getElementById('lienzo-firma');
+const ctxFirma = lienzo.getContext('2d');
+let firmando = false;
+let hayTrazo = false;
+
+function posicionRelativa(evento) {
+  const rect = lienzo.getBoundingClientRect();
+  const escalaX = lienzo.width / rect.width;
+  const escalaY = lienzo.height / rect.height;
+  return { x: (evento.clientX - rect.left) * escalaX, y: (evento.clientY - rect.top) * escalaY };
+}
+
+lienzo.addEventListener('pointerdown', (evento) => {
+  firmando = true;
+  hayTrazo = true;
+  const { x, y } = posicionRelativa(evento);
+  ctxFirma.beginPath();
+  ctxFirma.moveTo(x, y);
+  lienzo.setPointerCapture(evento.pointerId);
+});
+
+lienzo.addEventListener('pointermove', (evento) => {
+  if (!firmando) return;
+  const { x, y } = posicionRelativa(evento);
+  ctxFirma.lineWidth = 2.5;
+  ctxFirma.lineCap = 'round';
+  ctxFirma.strokeStyle = '#1f2937';
+  ctxFirma.lineTo(x, y);
+  ctxFirma.stroke();
+});
+
+function terminarTrazo() {
+  firmando = false;
+}
+lienzo.addEventListener('pointerup', terminarTrazo);
+lienzo.addEventListener('pointerleave', terminarTrazo);
+lienzo.addEventListener('pointercancel', terminarTrazo);
+
+function limpiarLienzo() {
+  ctxFirma.clearRect(0, 0, lienzo.width, lienzo.height);
+  hayTrazo = false;
+}
+
+document.getElementById('btn-limpiar-firma').addEventListener('click', limpiarLienzo);
+
+document.getElementById('btn-guardar-firma').addEventListener('click', async () => {
+  const errorEl = document.getElementById('mensaje-firma-error');
+  errorEl.hidden = true;
+
+  if (!hayTrazo) {
+    errorEl.textContent = 'El paciente debe firmar en el recuadro antes de guardar.';
+    errorEl.hidden = false;
+    return;
+  }
+
+  try {
+    await apiFetch('/api/consentimientos', {
+      method: 'POST',
+      body: JSON.stringify({
+        historiaClinicaId: historiaActualId,
+        firmaImagenBase64: lienzo.toDataURL('image/png'),
+      }),
+    });
+    document.getElementById('bloque-consentimiento-pendiente').hidden = true;
+    document.getElementById('bloque-consentimiento-firmado').hidden = false;
+  } catch (error) {
+    errorEl.textContent = error.message;
+    errorEl.hidden = false;
+  }
+});
+
+document.getElementById('btn-descargar-consentimiento').addEventListener('click', async () => {
+  try {
+    await descargarPdf(
+      `/api/consentimientos/historia/${historiaActualId}/pdf`,
+      `consentimiento-${pacienteActual?.numero_documento ?? 'paciente'}.pdf`
+    );
+  } catch (error) {
+    mostrarMensajeEnvio(error.message, true);
+  }
+});
+
+async function iniciarCierreConsulta(historiaId) {
+  historiaActualId = historiaId;
+  document.getElementById('seccion-cierre').hidden = false;
+  document.getElementById('bloque-consentimiento-pendiente').hidden = false;
+  document.getElementById('bloque-consentimiento-firmado').hidden = true;
+  document.getElementById('mensaje-envio').hidden = true;
+  document.getElementById('mensaje-envio-error').hidden = true;
+  limpiarLienzo();
+}
+
+async function cargarTextoConsentimiento() {
+  try {
+    const { texto } = await apiFetch('/api/consentimientos/texto-vigente');
+    document.getElementById('texto-consentimiento').textContent = texto;
+  } catch (error) {
+    document.getElementById('texto-consentimiento').textContent = 'No se pudo cargar el texto del consentimiento.';
+  }
+}
+
 cargarPaciente();
 cargarHistorial();
+cargarTextoConsentimiento();
 renderChips();

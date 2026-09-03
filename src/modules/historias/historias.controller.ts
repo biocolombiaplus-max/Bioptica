@@ -7,6 +7,9 @@ import {
 } from './historias.repository';
 import { obtenerOptometraPorId } from '../optometras/optometras.repository';
 import { buscarPacientePorId } from '../pacientes/pacientes.repository';
+import { obtenerOpticaPorId } from '../opticas/opticas.repository';
+import { generarFormulaPDF } from '../../services/pdf.service';
+import { enviarFormulaPorCorreo, CorreoNoConfiguradoError } from '../../services/correo.service';
 
 const ojoTexto = z.string().max(20).optional();
 const valorRefraccion = z.string().max(10).optional();
@@ -137,6 +140,76 @@ export const obtenerHistoriaHandler: RequestHandler = async (req, res, next) => 
     }
     res.json(historia);
   } catch (error) {
+    next(error);
+  }
+};
+
+export const formulaPdfHandler: RequestHandler = async (req, res, next) => {
+  try {
+    const opticaId = req.auth!.opticaId;
+    const historia = await obtenerHistoria(opticaId, req.params.id);
+    if (!historia) {
+      res.status(404).json({ error: 'Historia clínica no encontrada' });
+      return;
+    }
+    const [paciente, optica] = await Promise.all([
+      buscarPacientePorId(opticaId, historia.paciente_id),
+      obtenerOpticaPorId(opticaId),
+    ]);
+    if (!paciente || !optica) {
+      res.status(404).json({ error: 'No se pudo generar el PDF' });
+      return;
+    }
+
+    const pdf = await generarFormulaPDF({ optica, paciente, historia });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename="formula-${paciente.numero_documento}.pdf"`);
+    res.send(pdf);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const enviarCorreoSchema = z.object({
+  correoDestino: z.string().email(),
+});
+
+export const enviarFormulaCorreoHandler: RequestHandler = async (req, res, next) => {
+  const parsed = enviarCorreoSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: 'Datos inválidos', detalles: parsed.error.flatten() });
+    return;
+  }
+
+  try {
+    const opticaId = req.auth!.opticaId;
+    const historia = await obtenerHistoria(opticaId, req.params.id);
+    if (!historia) {
+      res.status(404).json({ error: 'Historia clínica no encontrada' });
+      return;
+    }
+    const [paciente, optica] = await Promise.all([
+      buscarPacientePorId(opticaId, historia.paciente_id),
+      obtenerOpticaPorId(opticaId),
+    ]);
+    if (!paciente || !optica) {
+      res.status(404).json({ error: 'No se pudo enviar el correo' });
+      return;
+    }
+
+    const pdf = await generarFormulaPDF({ optica, paciente, historia });
+    await enviarFormulaPorCorreo({
+      destinatario: parsed.data.correoDestino,
+      nombrePaciente: paciente.nombre_completo,
+      nombreOptica: optica.nombre,
+      pdf,
+    });
+    res.json({ enviado: true });
+  } catch (error) {
+    if (error instanceof CorreoNoConfiguradoError) {
+      res.status(error.status).json({ error: error.message });
+      return;
+    }
     next(error);
   }
 };
