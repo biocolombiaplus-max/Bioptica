@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bioptica — Historia clínica de optometría con IA</title>
+  <meta name="description" content="Bioptica: historia clínica de optometría con inteligencia artificial para ópticas en Latinoamérica. Dictado por voz, cumplimiento de la Resolución 3100 de 2019, firma digital sin papel y envío automático de fórmulas por WhatsApp y correo.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Manrope:wght@400;500;600;700;800&display=swap">
+  <style>
+    :root{
+      --bg:oklch(98.5% 0.004 240);
+      --bg-alt:oklch(96% 0.018 205);
+      --ink:oklch(22% 0.03 240);
+      --ink-soft:oklch(46% 0.02 240);
+      --ink-faint:oklch(62% 0.015 240);
+      --brand:oklch(38% 0.09 222);
+      --brand-dark:oklch(24% 0.06 226);
+      --brand-light:oklch(93% 0.025 210);
+      --accent:oklch(72% 0.16 45);
+      --accent-dark:oklch(60% 0.17 40);
+      --line:oklch(90% 0.01 235);
+      --white:oklch(100% 0 0);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Manrope', system-ui, sans-serif; }
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { color: var(--accent-dark); }
+    img { max-width: 100%; }
+
+    .bp-grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .bp-grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px; }
+    .bp-grid-4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; }
+
+    @keyframes bioptica-wave { 0%,100%{ transform:scaleY(0.35); } 50%{ transform:scaleY(1); } }
+    @keyframes bioptica-pulse {
+      0%,100%{ box-shadow:0 0 0 0 color-mix(in oklch, var(--accent) 45%, transparent); }
+      50%{ box-shadow:0 0 0 8px color-mix(in oklch, var(--accent) 0%, transparent); }
+    }
+
+    @media (max-width: 1000px) {
+      .bp-grid-4 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 760px) {
+      .bp-grid-2 { grid-template-columns:repeat(1,minmax(0,1fr)) !important; }
+      .bp-grid-3 { grid-template-columns:repeat(1,minmax(0,1fr)) !important; }
+      .bp-grid-4 { grid-template-columns:repeat(1,minmax(0,1fr)) !important; }
+      .bp-section { padding-left:24px !important; padding-right:24px !important; }
+      .bp-nav-links { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+<div style="background:var(--bg); color:var(--ink);">
+
+  <header class="bp-section" style="position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:20px 64px; background:var(--bg); border-bottom:1px solid var(--line);">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <svg viewBox="-12 0 76 36" width="36" height="17" style="flex-shrink:0;">
+        <defs>
+          <linearGradient id="bioEyeGradNav" x1="-12" y1="0" x2="64" y2="36" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#0B1F3A"></stop>
+            <stop offset="100%" stop-color="#2E6FD9"></stop>
+          </linearGradient>
+        </defs>
+        <path d="M6,18 C13,4 40,3 51,11 L61,18 L51,25 C40,33 13,32 6,18 Z" fill="none" stroke="url(#bioEyeGradNav)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"></path>
+        <circle cx="27" cy="18" r="8.5" fill="none" stroke="#2E6FD9" stroke-width="2"></circle>
+        <circle cx="27" cy="18" r="6" fill="#0B1F3A"></circle>
+        <circle cx="24.5" cy="15" r="1.6" fill="#ffffff"></circle>
+        <g fill="#0B1F3A">
+          <rect x="0" y="16.5" width="3" height="3"></rect>
+          <rect x="-4" y="12" width="3" height="3"></rect>
+          <rect x="-4" y="21" width="3" height="3"></rect>
+          <rect x="-8.5" y="8" width="2.5" height="2.5"></rect>
+          <rect x="-8.5" y="25" width="2.5" height="2.5"></rect>
+        </g>
+        <g stroke="#2E6FD9" stroke-width="1" fill="none">
+          <path d="M1.5,18 L6,18"></path>
+          <path d="M-2.5,13.5 L4,17"></path>
+          <path d="M-2.5,22.5 L4,19"></path>
+        </g>
+      </svg>
+      <span style="font-family:'Newsreader',serif; font-size:22px; font-weight:600; color:var(--ink); letter-spacing:-0.01em;">Bioptica</span>
+    </div>
+    <nav class="bp-nav-links" style="display:flex; align-items:center; gap:36px;">
+      <a href="#como-funciona" style="font-size:15px; font-weight:500; color:var(--ink-soft);">Cómo funciona</a>
+      <a href="#cumplimiento" style="font-size:15px; font-weight:500; color:var(--ink-soft);">Cumplimiento</a>
+      <a href="#planes" style="font-size:15px; font-weight:500; color:var(--ink-soft);">Planes</a>
+      <a href="#nosotros" style="font-size:15px; font-weight:500; color:var(--ink-soft);">Nosotros</a>
+    </nav>
+    <a href="#contacto" style="display:inline-flex; align-items:center; gap:8px; background:var(--accent); color:var(--brand-dark); font-weight:700; font-size:14px; padding:11px 20px; border-radius:999px; white-space:nowrap;">Agendar demo</a>
+  </header>
+
+  <!-- HERO -->
+  <section class="bp-section" style="position:relative; padding:100px 64px 130px; overflow:hidden;">
+    <div style="position:absolute; top:-120px; right:-160px; width:560px; height:560px; border-radius:50%; background:var(--brand-light); opacity:0.55; filter:blur(40px); z-index:0; pointer-events:none;"></div>
+
+    <div class="bp-grid-2" style="position:relative; z-index:1; max-width:1280px; margin:0 auto; align-items:center; gap:72px;">
+      <div>
+        <span style="display:inline-block; font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand); background:var(--brand-light); padding:7px 14px; border-radius:999px;">Historia clínica de optometría + IA</span>
+        <h1 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(38px,5vw,64px); line-height:1.05; color:var(--ink); margin:24px 0 0; letter-spacing:-0.02em;">Deja de redactar.<br>Solo habla.</h1>
+        <p style="font-size:19px; line-height:1.6; color:var(--ink-soft); max-width:520px; margin:24px 0 0;">Bioptica escucha al optómetra mientras examina y diligencia sola la historia clínica completa — agudeza visual, refracción, diagnóstico, fórmula final — lista para revisar y firmar en segundos, no en minutos.</p>
+        <div style="display:flex; align-items:center; gap:16px; margin-top:36px; flex-wrap:wrap;">
+          <a href="#contacto" style="display:inline-flex; align-items:center; gap:10px; background:var(--accent); color:var(--brand-dark); font-weight:700; font-size:16px; padding:15px 26px; border-radius:999px;">
+            Agendar una demo
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"></path></svg>
+          </a>
+          <a href="#como-funciona" style="font-weight:600; font-size:16px; color:var(--ink); display:inline-flex; align-items:center; gap:6px;">
+            Ver cómo funciona
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+          </a>
+        </div>
+        <p style="font-size:14px; color:var(--ink-faint); margin-top:28px;">Construida sobre la Resolución 3100 de 2019 · Tratamiento de datos conforme a la Ley 1581 de 2012</p>
+      </div>
+
+      <div style="position:relative;">
+        <div style="background:var(--white); border-radius:20px; box-shadow:0 30px 60px -20px color-mix(in oklch, var(--ink) 25%, transparent), 0 0 0 1px var(--line); overflow:hidden;">
+          <div style="display:flex; align-items:center; gap:8px; padding:14px 18px; background:var(--bg-alt); border-bottom:1px solid var(--line);">
+            <span style="width:10px;height:10px;border-radius:50%;background:oklch(75% 0.15 25); display:inline-block;"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:oklch(80% 0.14 85); display:inline-block;"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:oklch(75% 0.13 145); display:inline-block;"></span>
+            <span style="margin-left:10px; font-size:12px; color:var(--ink-faint);">bioptica.app — Nueva consulta</span>
+          </div>
+          <div style="padding:26px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; flex-wrap:wrap;">
+              <div>
+                <div style="font-weight:700; font-size:16px; color:var(--ink);">María Fernanda Ríos</div>
+                <div style="font-size:13px; color:var(--ink-faint);">CC 43.556.210 · 34 años</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; background:var(--brand-light); padding:8px 14px; border-radius:999px;">
+                <span style="width:26px;height:26px;border-radius:50%;background:var(--accent); display:flex; align-items:center; justify-content:center; flex-shrink:0; animation:bioptica-pulse 1.6s ease-in-out infinite;">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="var(--brand-dark)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><path d="M12 18v3"></path></svg>
+                </span>
+                <div style="display:flex; align-items:center; gap:3px; height:16px;">
+                  <span style="width:3px;height:100%;background:var(--brand-dark);border-radius:2px;display:inline-block;animation:bioptica-wave 0.9s ease-in-out infinite; animation-delay:0s;"></span>
+                  <span style="width:3px;height:100%;background:var(--brand-dark);border-radius:2px;display:inline-block;animation:bioptica-wave 0.9s ease-in-out infinite; animation-delay:0.12s;"></span>
+                  <span style="width:3px;height:100%;background:var(--brand-dark);border-radius:2px;display:inline-block;animation:bioptica-wave 0.9s ease-in-out infinite; animation-delay:0.24s;"></span>
+                  <span style="width:3px;height:100%;background:var(--brand-dark);border-radius:2px;display:inline-block;animation:bioptica-wave 0.9s ease-in-out infinite; animation-delay:0.08s;"></span>
+                  <span style="width:3px;height:100%;background:var(--brand-dark);border-radius:2px;display:inline-block;animation:bioptica-wave 0.9s ease-in-out infinite; animation-delay:0.18s;"></span>
+                  <span style="width:3px;height:100%;background:var(--brand-dark);border-radius:2px;display:inline-block;animation:bioptica-wave 0.9s ease-in-out infinite; animation-delay:0.06s;"></span>
+                  <span style="width:3px;height:100%;background:var(--brand-dark);border-radius:2px;display:inline-block;animation:bioptica-wave 0.9s ease-in-out infinite; animation-delay:0.2s;"></span>
+                </div>
+                <span style="font-size:12px; font-weight:600; color:var(--brand-dark); white-space:nowrap;">Escuchando…</span>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:12px 14px; background:var(--bg-alt); border-radius:10px; border:1px solid var(--line);">
+                <div>
+                  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-faint);">Motivo de consulta</div>
+                  <div style="font-size:14px; color:var(--ink); margin-top:3px;">Visión borrosa de lejos, hace 3 meses</div>
+                </div>
+                <span style="flex-shrink:0; font-size:10px; font-weight:800; color:var(--brand); background:var(--brand-light); padding:3px 8px; border-radius:6px; letter-spacing:0.03em;">IA</span>
+              </div>
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:12px 14px; background:var(--bg-alt); border-radius:10px; border:1px solid var(--line);">
+                <div>
+                  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-faint);">Agudeza visual sin corrección — OD / OI</div>
+                  <div style="font-size:14px; color:var(--ink); margin-top:3px;">20/40 · 20/50</div>
+                </div>
+                <span style="flex-shrink:0; font-size:10px; font-weight:800; color:var(--brand); background:var(--brand-light); padding:3px 8px; border-radius:6px; letter-spacing:0.03em;">IA</span>
+              </div>
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:12px 14px; background:var(--bg-alt); border-radius:10px; border:1px solid var(--line);">
+                <div>
+                  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-faint);">Subjetivo OD (Esf/Cil x Eje)</div>
+                  <div style="font-size:14px; color:var(--ink); margin-top:3px;">-1.00 / -0.50 x 180</div>
+                </div>
+                <span style="flex-shrink:0; font-size:10px; font-weight:800; color:var(--brand); background:var(--brand-light); padding:3px 8px; border-radius:6px; letter-spacing:0.03em;">IA</span>
+              </div>
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:12px 14px; background:var(--bg-alt); border-radius:10px; border:1px solid var(--line);">
+                <div>
+                  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-faint);">Diagnóstico (CIE-10)</div>
+                  <div style="font-size:14px; color:var(--ink); margin-top:3px;">H52.1 — Miopía</div>
+                </div>
+                <span style="flex-shrink:0; font-size:10px; font-weight:800; color:var(--brand); background:var(--brand-light); padding:3px 8px; border-radius:6px; letter-spacing:0.03em;">IA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POSICIONAMIENTO -->
+  <section class="bp-section" style="background:var(--brand-light); padding:20px 64px; text-align:center;">
+    <p style="margin:0; font-size:14px; font-weight:600; color:var(--brand-dark); display:inline-flex; align-items:center; gap:8px;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.5 3.8 5.8 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.8-3.8-9s1.3-6.5 3.8-9Z"></path></svg>
+      Diseñado específicamente para ópticas en Latinoamérica — pensado y construido desde Colombia
+    </p>
+  </section>
+
+  <!-- PROBLEMA -->
+  <section class="bp-section" style="background:var(--bg-alt); padding:110px 64px;">
+    <div style="max-width:820px; margin:0 auto; text-align:center;">
+      <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); letter-spacing:-0.01em; margin:0;">Cada historia escrita a mano es tiempo que no dedicas a atender pacientes</h2>
+      <p style="font-size:17px; line-height:1.7; color:var(--ink-soft); margin:20px auto 0; max-width:680px;">Entre examinar, redactar la anamnesis, transcribir la refracción y diligenciar cada campo de la Resolución 3100 a mano, buena parte de la jornada de un optómetra se va en digitar — no en atender. Ese tiempo tiene un costo directo sobre cuántas citas caben en el día.</p>
+    </div>
+    <div class="bp-grid-3" style="max-width:1000px; margin:56px auto 0;">
+      <div style="text-align:center; padding:8px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:var(--white); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--brand); margin:0 auto 16px;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:16px; color:var(--ink);">Tiempo que se va en digitar</div>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.6; margin-top:6px;">Cada campo transcrito a mano es tiempo que no se traduce en más consultas atendidas.</p>
+      </div>
+      <div style="text-align:center; padding:8px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:var(--white); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--brand); margin:0 auto 16px;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18"></path><path d="M8 3v4M16 3v4"></path><path d="M9 14l6 4M15 14l-6 4"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:16px; color:var(--ink);">Menos citas posibles</div>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.6; margin-top:6px;">Una consulta más larga por el papeleo significa una agenda más corta y menos ingresos por jornada.</p>
+      </div>
+      <div style="text-align:center; padding:8px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:var(--white); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--brand); margin:0 auto 16px;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="17" height="8" rx="2"></rect><path d="M22 10v4"></path><rect x="4" y="10" width="3" height="4" fill="currentColor" stroke="none"></rect></svg>
+        </div>
+        <div style="font-weight:700; font-size:16px; color:var(--ink);">Desgaste innecesario</div>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.6; margin-top:6px;">Redactar lo mismo una y otra vez cansa más que examinar — y no debería ser así.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona" class="bp-section" style="padding:130px 64px;">
+    <div style="max-width:720px; margin:0 auto; text-align:center;">
+      <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand);">Cómo funciona</span>
+      <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); margin:14px 0 0; letter-spacing:-0.01em;">De la consulta a la fórmula firmada, sin escribir de más</h2>
+    </div>
+    <div class="bp-grid-4" style="max-width:1280px; margin:64px auto 0;">
+      <div style="padding:28px 22px; background:var(--bg-alt); border-radius:18px; border:1px solid var(--line); height:100%;">
+        <div style="font-family:'Newsreader',serif; font-size:15px; font-weight:600; color:var(--brand); margin-bottom:16px;">01</div>
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--white); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--brand); margin-bottom:18px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><path d="M12 18v3"></path><path d="M8 21h8"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:17px; color:var(--ink);">Habla mientras examinas</div>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.65; margin-top:8px;">Dictas en lenguaje natural, como le explicarías el caso a un colega. Sin campos que llenar uno por uno.</p>
+      </div>
+      <div style="padding:28px 22px; background:var(--bg-alt); border-radius:18px; border:1px solid var(--line); height:100%;">
+        <div style="font-family:'Newsreader',serif; font-size:15px; font-weight:600; color:var(--brand); margin-bottom:16px;">02</div>
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--white); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--brand); margin-bottom:18px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"></circle><circle cx="18" cy="6" r="2.2"></circle><circle cx="12" cy="12" r="2.4"></circle><circle cx="6" cy="18" r="2.2"></circle><circle cx="18" cy="18" r="2.2"></circle><path d="M7.8 7.3 10.3 10.4M16.2 7.3 13.7 10.4M7.8 16.7 10.3 13.6M16.2 16.7 13.7 13.6"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:17px; color:var(--ink);">La IA estructura la historia</div>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.65; margin-top:8px;">Interpreta el dictado y diligencia agudeza visual, refracción, diagnóstico CIE-10 y plan. Motor dual: si Claude no responde, Gemini toma el relevo automáticamente.</p>
+      </div>
+      <div style="padding:28px 22px; background:var(--bg-alt); border-radius:18px; border:1px solid var(--line); height:100%;">
+        <div style="font-family:'Newsreader',serif; font-size:15px; font-weight:600; color:var(--brand); margin-bottom:16px;">03</div>
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--white); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--brand); margin-bottom:18px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1Z"></path><path d="M14 6.5 17.5 10"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:17px; color:var(--ink);">Revisas y firmas</div>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.65; margin-top:8px;">Corriges lo que haga falta y firmas con tu nombre y número de registro profesional. La última palabra siempre es tuya.</p>
+      </div>
+      <div style="padding:28px 22px; background:var(--bg-alt); border-radius:18px; border:1px solid var(--line); height:100%;">
+        <div style="font-family:'Newsreader',serif; font-size:15px; font-weight:600; color:var(--brand); margin-bottom:16px;">04</div>
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--white); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--brand); margin-bottom:18px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 3 10.5l7 2.5 2.5 7L21 3Z"></path><path d="M10.5 13 15 8.5"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:17px; color:var(--ink);">Todo se genera al instante</div>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.65; margin-top:8px;">El paciente firma el consentimiento con el dedo en la pantalla — cero papel, cero impresora. La fórmula en PDF con tu membrete queda lista y un clic la envía por WhatsApp o correo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOCKUPS -->
+  <section class="bp-section" style="background:var(--bg-alt); padding:130px 64px;">
+    <div style="max-width:720px; margin:0 auto; text-align:center;">
+      <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); margin:0; letter-spacing:-0.01em;">Lo que queda listo al terminar la consulta</h2>
+    </div>
+    <div class="bp-grid-4" style="max-width:1280px; margin:56px auto 0; align-items:stretch;">
+
+      <div style="background:var(--white); border-radius:18px; border:1px solid var(--line); overflow:hidden; box-shadow:0 20px 40px -24px color-mix(in oklch, var(--ink) 20%, transparent); display:flex; flex-direction:column;">
+        <div style="padding:20px 22px; border-bottom:1px solid var(--line);">
+          <div style="font-weight:700; font-size:16px; color:var(--ink);">Historia clínica completa</div>
+          <p style="font-size:13px; color:var(--ink-soft); margin:4px 0 0;">Cada campo de la Resolución 3100, diligenciado y listo para firmar.</p>
+        </div>
+        <div style="padding:20px 22px; flex:1; display:flex; flex-direction:column; gap:10px; background:var(--bg-alt);">
+          <div style="padding-bottom:8px; border-bottom:1px solid var(--line);">
+            <div style="font-size:13.5px; font-weight:700; color:var(--ink);">Ana Sofía Restrepo</div>
+            <div style="font-size:10.5px; color:var(--ink-faint); margin-top:2px;">CC 1.020.456.789 · 34 años · EPS Sura · 14 ago 2026</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:1px; background:var(--line); border-radius:8px; overflow:hidden; font-size:11.5px;">
+            <div style="background:var(--white); padding:8px 10px;"></div>
+            <div style="background:var(--white); padding:8px 10px; font-weight:700; color:var(--ink-faint); text-align:center;">OD</div>
+            <div style="background:var(--white); padding:8px 10px; font-weight:700; color:var(--ink-faint); text-align:center;">OI</div>
+            <div style="background:var(--white); padding:8px 10px; color:var(--ink-soft);">AV sin corrección</div>
+            <div style="background:var(--white); padding:8px 10px; text-align:center; color:var(--ink); font-weight:600;">20/40</div>
+            <div style="background:var(--white); padding:8px 10px; text-align:center; color:var(--ink); font-weight:600;">20/50</div>
+            <div style="background:var(--white); padding:8px 10px; color:var(--ink-soft);">Subjetivo</div>
+            <div style="background:var(--white); padding:8px 10px; text-align:center; color:var(--ink); font-weight:600;">-1.00/-0.50x180</div>
+            <div style="background:var(--white); padding:8px 10px; text-align:center; color:var(--ink); font-weight:600;">-0.75/-0.25x170</div>
+          </div>
+          <span style="align-self:flex-start; font-size:11px; font-weight:700; background:var(--brand-light); color:var(--brand); padding:5px 10px; border-radius:999px;">H52.1 — Miopía</span>
+        </div>
+      </div>
+
+      <div style="background:var(--white); border-radius:18px; border:1px solid var(--line); overflow:hidden; box-shadow:0 20px 40px -24px color-mix(in oklch, var(--ink) 20%, transparent); display:flex; flex-direction:column;">
+        <div style="padding:20px 22px; border-bottom:1px solid var(--line);">
+          <div style="font-weight:700; font-size:16px; color:var(--ink);">Historial acumulado del paciente</div>
+          <p style="font-size:13px; color:var(--ink-soft); margin:4px 0 0;">Se busca por cédula y aparece toda su evolución, visita a visita.</p>
+        </div>
+        <div style="padding:20px 22px; flex:1; display:flex; flex-direction:column; gap:10px; background:var(--bg-alt);">
+          <div style="font-size:12.5px; font-weight:700; color:var(--ink);">Ana Sofía Restrepo</div>
+          <div style="background:var(--white); border:1px solid var(--line); border-radius:10px; padding:10px 12px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+              <span style="font-size:12px; font-weight:700; color:var(--ink);">14 ago 2026</span>
+              <span style="font-size:10px; font-weight:700; background:var(--brand-light); color:var(--brand); padding:3px 8px; border-radius:999px;">H52.1 — Miopía</span>
+            </div>
+            <div style="font-size:11.5px; color:var(--ink-soft); margin-top:4px;">Control anual · fórmula actualizada</div>
+          </div>
+          <div style="background:var(--white); border:1px solid var(--line); border-radius:10px; padding:10px 12px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+              <span style="font-size:12px; font-weight:700; color:var(--ink);">02 feb 2026</span>
+              <span style="font-size:10px; font-weight:700; background:var(--brand-light); color:var(--brand); padding:3px 8px; border-radius:999px;">Z01.0 — Examen</span>
+            </div>
+            <div style="font-size:11.5px; color:var(--ink-soft); margin-top:4px;">Revisión de rutina · sin cambios en fórmula</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--white); border-radius:18px; border:1px solid var(--line); overflow:hidden; box-shadow:0 20px 40px -24px color-mix(in oklch, var(--ink) 20%, transparent); display:flex; flex-direction:column;">
+        <div style="padding:20px 22px; border-bottom:1px solid var(--line);">
+          <div style="font-weight:700; font-size:16px; color:var(--ink);">Fórmula óptica lista para enviar</div>
+          <p style="font-size:13px; color:var(--ink-soft); margin:4px 0 0;">PDF con membrete de tu óptica, listo para imprimir o enviar.</p>
+        </div>
+        <div style="padding:20px 22px; flex:1; background:var(--bg-alt);">
+          <div style="background:var(--white); border:1px solid var(--line); border-radius:12px; padding:16px;">
+            <div style="display:flex; align-items:center; gap:9px; padding-bottom:10px; margin-bottom:10px; border-bottom:2px solid #7C3AED;">
+              <div style="width:30px;height:30px;border-radius:50%;background:#7C3AED; display:flex; align-items:center; justify-content:center; color:#ffffff; font-size:11px; font-weight:800; flex-shrink:0;">OV</div>
+              <div>
+                <div style="font-family:'Newsreader',serif; font-weight:700; font-size:13.5px; color:#7C3AED; line-height:1.2;">Óptica Visión Total</div>
+                <div style="font-size:9.5px; color:var(--ink-faint);">Fórmula óptica</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-size:11px; font-weight:700; color:var(--ink);">Ana Sofía Restrepo</span>
+              <span style="font-size:10px; color:var(--ink-faint);">14 ago 2026</span>
+            </div>
+            <div style="display:grid; grid-template-columns:0.7fr 1fr 1fr 1fr 1fr; gap:1px; background:var(--line); border-radius:6px; overflow:hidden; font-size:10.5px;">
+              <div style="background:var(--white); padding:7px 6px;"></div>
+              <div style="background:var(--white); padding:7px 6px; font-weight:700; color:var(--ink-faint); text-align:center;">Esf</div>
+              <div style="background:var(--white); padding:7px 6px; font-weight:700; color:var(--ink-faint); text-align:center;">Cil</div>
+              <div style="background:var(--white); padding:7px 6px; font-weight:700; color:var(--ink-faint); text-align:center;">Eje</div>
+              <div style="background:var(--white); padding:7px 6px; font-weight:700; color:var(--ink-faint); text-align:center;">Add</div>
+              <div style="background:var(--white); padding:7px 6px; font-weight:700; color:var(--ink-soft);">OD</div>
+              <div style="background:var(--white); padding:7px 6px; text-align:center; color:var(--ink); font-weight:600;">-1.00</div>
+              <div style="background:var(--white); padding:7px 6px; text-align:center; color:var(--ink); font-weight:600;">-0.50</div>
+              <div style="background:var(--white); padding:7px 6px; text-align:center; color:var(--ink); font-weight:600;">180</div>
+              <div style="background:var(--white); padding:7px 6px; text-align:center; color:var(--ink); font-weight:600;">—</div>
+              <div style="background:var(--white); padding:7px 6px; font-weight:700; color:var(--ink-soft);">OI</div>
+              <div style="background:var(--white); padding:7px 6px; text-align:center; color:var(--ink); font-weight:600;">-0.75</div>
+              <div style="background:var(--white); padding:7px 6px; text-align:center; color:var(--ink); font-weight:600;">-0.25</div>
+              <div style="background:var(--white); padding:7px 6px; text-align:center; color:var(--ink); font-weight:600;">170</div>
+              <div style="background:var(--white); padding:7px 6px; text-align:center; color:var(--ink); font-weight:600;">—</div>
+            </div>
+            <div style="font-size:10.5px; color:var(--ink-soft); margin-top:10px;">DIP 62mm · Monofocal · Policarbonato antirreflejo</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:8px;">
+              <div style="font-size:10.5px; color:var(--ink-faint);">Firmado: Dra. A. Gómez · Reg. TP-00000</div>
+              <span style="flex-shrink:0; width:30px;height:30px;border-radius:50%;background:var(--brand-light); display:flex; align-items:center; justify-content:center; color:var(--brand);">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 3 10.5l7 2.5 2.5 7L21 3Z"></path></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--white); border-radius:18px; border:1px solid var(--line); overflow:hidden; box-shadow:0 20px 40px -24px color-mix(in oklch, var(--ink) 20%, transparent); display:flex; flex-direction:column;">
+        <div style="padding:20px 22px; border-bottom:1px solid var(--line);">
+          <div style="font-weight:700; font-size:16px; color:var(--ink);">Consentimiento firmado sin papel</div>
+          <p style="font-size:13px; color:var(--ink-soft); margin:4px 0 0;">El paciente firma con el dedo, directo en la tablet o el celular de la óptica.</p>
+        </div>
+        <div style="padding:20px 22px; flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:14px; background:var(--bg-alt);">
+          <div style="width:100%; background:var(--white); border:1.5px dashed var(--line); border-radius:10px; padding:16px; display:flex; align-items:center; justify-content:center;">
+            <svg viewBox="0 0 160 60" width="140" height="52" fill="none" stroke="var(--brand)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 42c8-22 16 18 24-4 5-14 10 10 16-2 4-9 8 6 13-3 6-11 10 8 16-2 5-8 9 4 14-3 4-6 8 2 12-6"></path></svg>
+          </div>
+          <span style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:var(--brand);">
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            Firmado — sin imprimir, sin archivar papel
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA INTERMEDIO -->
+  <section class="bp-section" style="padding:0 64px;">
+    <div style="max-width:1000px; margin:0 auto; background:var(--brand); border-radius:20px; padding:36px 44px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;">
+      <p style="margin:0; font-size:17px; font-weight:600; color:var(--white);">¿Quieres verlo funcionando con tu propio flujo de trabajo?</p>
+      <a href="#contacto" style="flex-shrink:0; display:inline-flex; align-items:center; gap:8px; background:var(--accent); color:var(--brand-dark); font-weight:700; font-size:15px; padding:13px 24px; border-radius:999px; white-space:nowrap;">
+        Agendar una demo
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"></path></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- CUMPLIMIENTO -->
+  <section id="cumplimiento" class="bp-section" style="padding:130px 64px;">
+    <div class="bp-grid-2" style="max-width:1200px; margin:0 auto; align-items:center; gap:72px;">
+      <div>
+        <div style="width:52px;height:52px;border-radius:14px;background:var(--brand-light); display:flex; align-items:center; justify-content:center; color:var(--brand); margin-bottom:22px;">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"></path><path d="M9 12l2 2 4-4"></path></svg>
+        </div>
+        <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.4vw,40px); color:var(--ink); letter-spacing:-0.01em; margin:0;">Cumplimiento normativo, no como jerga legal — como tranquilidad</h2>
+        <p style="font-size:16px; line-height:1.7; color:var(--ink-soft); margin-top:18px; max-width:480px;">Bioptica no es un formulario genérico con IA encima: cada campo existe porque la normativa colombiana lo exige.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="background:var(--bg-alt); border:1px solid var(--line); border-radius:16px; padding:22px 24px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <div style="font-weight:700; font-size:16px; color:var(--ink);">Resolución 3100 de 2019</div>
+          </div>
+          <p style="font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0 0;">El formulario sigue la estructura vigente para el servicio de optometría: identificación, anamnesis, examen visual, examen físico ocular, diagnóstico con CIE-10 y fórmula óptica final.</p>
+        </div>
+        <div style="background:var(--bg-alt); border:1px solid var(--line); border-radius:16px; padding:22px 24px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <div style="font-weight:700; font-size:16px; color:var(--ink);">Ley 1581 de 2012</div>
+          </div>
+          <p style="font-size:14px; color:var(--ink-soft); line-height:1.6; margin:8px 0 0;">Cada historia se acompaña del consentimiento informado y la autorización de tratamiento de datos personales, listos para la firma del paciente.</p>
+        </div>
+        <p style="font-size:13px; color:var(--ink-faint); line-height:1.6; margin-top:4px;">Recomendamos que el equipo legal de tu óptica (o el Colegio de Optómetras) valide el cumplimiento normativo final antes de usarlo con pacientes reales.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MULTI-OPTICA -->
+  <section class="bp-section" style="background:var(--brand-dark); padding:130px 64px; color:var(--white);">
+    <div style="max-width:720px; margin:0 auto; text-align:center;">
+      <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:oklch(80% 0.05 210);">Multi-óptica</span>
+      <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); margin:14px 0 0; letter-spacing:-0.01em;">Una plataforma. Cada óptica, su propio mundo.</h2>
+    </div>
+    <div class="bp-grid-3" style="max-width:1100px; margin:64px auto 0;">
+      <div style="text-align:center; padding:8px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:oklch(32% 0.05 225); display:flex; align-items:center; justify-content:center; color:oklch(85% 0.05 205); margin:0 auto 16px;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"></path><path d="M9 12l2 2 4-4"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:16px;">Aislamiento total</div>
+        <p style="font-size:14px; color:oklch(80% 0.02 220); line-height:1.6; margin-top:6px;">Los pacientes, historias y configuración de cada óptica nunca se cruzan con los de otra.</p>
+      </div>
+      <div style="text-align:center; padding:8px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:oklch(32% 0.05 225); display:flex; align-items:center; justify-content:center; color:oklch(85% 0.05 205); margin:0 auto 16px;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path><circle cx="17.5" cy="8.5" r="2.5"></circle><path d="M15.5 14c2.9.2 5 2.6 5 6"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:16px;">Un login por optómetra</div>
+        <p style="font-size:14px; color:oklch(80% 0.02 220); line-height:1.6; margin-top:6px;">Cada optómetra tiene su propio acceso, su número de registro profesional y su firma electrónica.</p>
+      </div>
+      <div style="text-align:center; padding:8px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:oklch(32% 0.05 225); display:flex; align-items:center; justify-content:center; color:oklch(85% 0.05 205); margin:0 auto 16px;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="4"></rect><circle cx="16" cy="12" r="3" fill="currentColor" stroke="none"></circle></svg>
+        </div>
+        <div style="font-weight:700; font-size:16px;">Se activa óptica por óptica</div>
+        <p style="font-size:14px; color:oklch(80% 0.02 220); line-height:1.6; margin-top:6px;">El módulo de historia clínica se enciende de forma individual para cada óptica cliente.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONALIZACION -->
+  <section class="bp-section" style="padding:130px 64px;">
+    <div class="bp-grid-2" style="max-width:1200px; margin:0 auto; align-items:center; gap:72px;">
+      <div>
+        <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand);">100% adaptable a tu óptica</span>
+        <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.4vw,40px); color:var(--ink); letter-spacing:-0.01em; margin:14px 0 0;">Con tu marca, no con la nuestra</h2>
+        <p style="font-size:16px; line-height:1.7; color:var(--ink-soft); margin-top:18px; max-width:480px;">Ninguna óptica trabaja igual que otra. Por eso tu logo y el color de tu marca van en cada fórmula y cada documento que sale de Bioptica — nada de plantillas genéricas con la marca de otro.</p>
+      </div>
+      <div style="background:var(--white); border:1px solid var(--line); border-radius:18px; padding:24px; box-shadow:0 20px 40px -24px color-mix(in oklch, var(--ink) 20%, transparent);">
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-faint); margin-bottom:12px;">Vista previa de tu membrete</div>
+        <div style="border:1.5px dashed var(--line); border-radius:10px; padding:18px; background:var(--bg-alt);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <div style="width:38px;height:38px;border-radius:9px;background:#F3E8FF; display:flex; align-items:center; justify-content:center; font-size:8px; color:#7C3AED; font-weight:800; text-align:center; line-height:1.1; flex-shrink:0;">TU<br>LOGO</div>
+            <div style="font-family:'Newsreader',serif; font-weight:700; font-size:17px; color:#7C3AED;">Óptica Visión Total</div>
+          </div>
+          <div style="height:3px; background:#7C3AED; border-radius:2px; margin-bottom:10px;"></div>
+          <div style="font-size:10px; font-weight:700; letter-spacing:0.04em; color:var(--ink-faint);">FÓRMULA ÓPTICA</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:16px;">
+          <span style="font-size:11px; color:var(--ink-faint); margin-right:2px;">Tu color:</span>
+          <span style="width:26px;height:26px;border-radius:50%;background:#0F766E; border:2px solid var(--white); box-shadow:0 0 0 1px var(--line);"></span>
+          <span style="width:26px;height:26px;border-radius:50%;background:#7C3AED; border:2px solid var(--white); box-shadow:0 0 0 1px var(--line);"></span>
+          <span style="width:26px;height:26px;border-radius:50%;background:#DC2626; border:2px solid var(--white); box-shadow:0 0 0 1px var(--line);"></span>
+          <span style="width:26px;height:26px;border-radius:50%;background:#EA580C; border:2px solid var(--white); box-shadow:0 0 0 1px var(--line);"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROI -->
+  <section class="bp-section" style="padding:130px 64px;">
+    <div style="max-width:760px; margin:0 auto; text-align:center;">
+      <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); letter-spacing:-0.01em; margin:0;">Menos tiempo redactando, más consultas en la agenda</h2>
+      <p style="font-size:17px; line-height:1.7; color:var(--ink-soft); margin:18px auto 0; max-width:600px;">El tiempo que un optómetra deja de gastar transcribiendo una historia a mano es tiempo que puede dedicar al siguiente paciente — o a cerrar la jornada más temprano.</p>
+    </div>
+    <div style="max-width:640px; margin:48px auto 0; background:var(--bg-alt); border:1px solid var(--line); border-radius:20px; padding:36px 40px;">
+      <span style="font-size:11px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent-dark);">Ejemplo ilustrativo — no corresponde a datos de un cliente real</span>
+      <p style="font-size:17px; line-height:1.7; color:var(--ink); margin-top:14px;">Si dictar una historia completa toma cerca de <strong>3 minutos</strong> frente a los <strong>10–12 minutos</strong> de digitarla a mano, un optómetra con 15 consultas al día podría liberar más de <strong>1.5 horas</strong> de su jornada — suficientes para atender <strong>3 a 4 consultas adicionales</strong>.</p>
+    </div>
+  </section>
+
+  <!-- PLANES -->
+  <section id="planes" class="bp-section" style="background:var(--bg-alt); padding:130px 64px;">
+    <div style="max-width:720px; margin:0 auto; text-align:center;">
+      <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand);">Planes</span>
+      <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); margin:14px 0 0; letter-spacing:-0.01em;">Un plan para cada tamaño de óptica</h2>
+      <p style="font-size:16px; line-height:1.7; color:var(--ink-soft); margin-top:16px;">Precios en dólares, pensados para toda Suramérica y Centroamérica. Escalas con el tamaño de tu equipo, no con el número de pacientes que atiendes.</p>
+    </div>
+
+    <div class="bp-grid-3" style="max-width:1100px; margin:64px auto 0; align-items:start;">
+
+      <div style="background:var(--white); border:1px solid var(--line); border-top:4px solid var(--ink-faint); border-radius:18px; padding:32px 28px; display:flex; flex-direction:column; height:100%;">
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--bg-alt); display:flex; align-items:center; justify-content:center; color:var(--ink-soft); margin-bottom:16px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:18px; color:var(--ink);">Esencial</div>
+        <p style="font-size:13px; color:var(--ink-soft); margin:4px 0 0;">Para una óptica con 1 a 2 optómetras</p>
+        <div style="margin:22px 0;">
+          <span style="font-family:'Newsreader',serif; font-size:38px; font-weight:700; color:var(--ink);">$39</span>
+          <span style="font-size:14px; color:var(--ink-faint);"> USD/mes</span>
+        </div>
+        <ul style="list-style:none; padding:0; margin:0 0 28px; display:flex; flex-direction:column; gap:11px;">
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Historia clínica completa con dictado por IA</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Consentimiento informado con firma táctil</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Envío de fórmula por WhatsApp y correo</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Hasta 2 optómetras + 1 usuario administrativo</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Soporte por correo</span>
+          </li>
+        </ul>
+        <a href="#contacto" style="margin-top:auto; text-align:center; background:var(--bg-alt); border:1px solid var(--line); color:var(--ink); font-weight:700; font-size:14px; padding:12px; border-radius:10px;">Elegir Esencial</a>
+      </div>
+
+      <div style="background:var(--white); border:2px solid var(--brand); border-top:4px solid var(--accent); border-radius:18px; padding:32px 28px; display:flex; flex-direction:column; height:100%; position:relative; box-shadow:0 24px 48px -20px color-mix(in oklch, var(--brand) 35%, transparent); transform:translateY(-8px);">
+        <span style="position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--accent); color:var(--brand-dark); font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; padding:6px 16px; border-radius:999px; white-space:nowrap;">Más elegido</span>
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--brand-light); display:flex; align-items:center; justify-content:center; color:var(--brand); margin:6px 0 16px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 14.9 8.6 22 9.3 16.7 14 18.2 21 12 17.3 5.8 21 7.3 14 2 9.3 9.1 8.6 12 2Z"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:18px; color:var(--ink);">Profesional</div>
+        <p style="font-size:13px; color:var(--ink-soft); margin:4px 0 0;">Para ópticas con equipo en crecimiento</p>
+        <div style="margin:22px 0;">
+          <span style="font-family:'Newsreader',serif; font-size:38px; font-weight:700; color:var(--ink);">$89</span>
+          <span style="font-size:14px; color:var(--ink-faint);"> USD/mes</span>
+        </div>
+        <ul style="list-style:none; padding:0; margin:0 0 28px; display:flex; flex-direction:column; gap:11px;">
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Todo lo de Esencial</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Hasta 5 optómetras + 3 usuarios administrativos</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span><strong>Inventario</strong> de monturas, lentes y accesorios</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Marca personalizada: tu logo y color en cada documento</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Soporte prioritario por WhatsApp</span>
+          </li>
+        </ul>
+        <a href="#contacto" style="margin-top:auto; text-align:center; background:var(--brand); color:var(--white); font-weight:700; font-size:14px; padding:12px; border-radius:10px;">Elegir Profesional</a>
+      </div>
+
+      <div style="background:var(--white); border:1px solid var(--line); border-top:4px solid var(--brand-dark); border-radius:18px; padding:32px 28px; display:flex; flex-direction:column; height:100%;">
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--brand-light); display:flex; align-items:center; justify-content:center; color:var(--brand-dark); margin-bottom:16px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="7" height="11"></rect><rect x="14" y="5" width="7" height="16"></rect><path d="M6 14h1M6 17h1M17 9h1M17 12h1M17 15h1"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:18px; color:var(--ink);">Multi-sede</div>
+        <p style="font-size:13px; color:var(--ink-soft); margin:4px 0 0;">Para cadenas y ópticas con varias sedes</p>
+        <div style="margin:22px 0;">
+          <span style="font-family:'Newsreader',serif; font-size:32px; font-weight:700; color:var(--ink);">Desde $179</span>
+          <span style="font-size:14px; color:var(--ink-faint);"> USD/mes</span>
+        </div>
+        <ul style="list-style:none; padding:0; margin:0 0 28px; display:flex; flex-direction:column; gap:11px;">
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Todo lo de Profesional</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Optómetras y personal administrativo ilimitados</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Varias sedes bajo una sola cuenta</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-soft);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M6 10l2.5 2.5L14 7"></path></svg>
+            <span>Soporte dedicado + onboarding del equipo</span>
+          </li>
+          <li style="display:flex; align-items:flex-start; gap:8px; font-size:13.5px; color:var(--ink-faint);">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="var(--ink-faint)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="10" cy="10" r="9"></circle><path d="M10 6v4l3 2"></path></svg>
+            <span>Tienda online con carrito y pagos con tarjeta <span style="display:inline-block; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.03em; color:var(--ink-faint); background:var(--bg-alt); border:1px solid var(--line); padding:2px 7px; border-radius:999px; margin-left:2px; white-space:nowrap;">Próximamente</span></span>
+          </li>
+        </ul>
+        <a href="#contacto" style="margin-top:auto; text-align:center; background:var(--bg-alt); border:1px solid var(--line); color:var(--ink); font-weight:700; font-size:14px; padding:12px; border-radius:10px;">Hablar con ventas</a>
+      </div>
+
+    </div>
+
+    <div style="text-align:center; margin-top:44px;">
+      <p style="font-size:13.5px; color:var(--ink-faint); margin:0 0 16px;">Precios de referencia — te confirmamos el plan exacto según tu país y el tamaño de tu equipo.</p>
+      <a href="https://wa.me/[TU NÚMERO DE WHATSAPP DE VENTAS]" style="display:inline-flex; align-items:center; gap:10px; background:#25D366; color:#ffffff; font-weight:700; font-size:15px; padding:14px 26px; border-radius:999px;">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.87.5 3.63 1.38 5.15L2 22l4.98-1.31C8.44 21.5 10.17 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Zm0 18.13c-1.6 0-3.13-.43-4.46-1.23l-.32-.19-3.03.8.81-2.94-.21-.31A8.11 8.11 0 0 1 3.87 12c0-4.48 3.65-8.13 8.13-8.13S20.13 7.52 20.13 12 16.48 20.13 12 20.13Zm4.52-5.94c-.25-.12-1.45-.72-1.68-.8-.22-.08-.39-.12-.55.12-.16.25-.63.8-.78.96-.14.16-.29.18-.53.06-.25-.12-1.04-.38-1.99-1.22-.73-.65-1.23-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.16.04-.31-.02-.43-.06-.12-.55-1.32-.75-1.8-.2-.48-.4-.42-.55-.42h-.47c-.16 0-.43.06-.65.31s-.86.84-.86 2.04.88 2.37 1 2.53c.12.16 1.73 2.64 4.2 3.7.59.25 1.05.4 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.45-.59 1.65-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.47-.28Z"></path></svg>
+        Consultar planes por WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- PROXIMAMENTE -->
+  <section class="bp-section" style="background:var(--bg-alt); padding:130px 64px;">
+    <div style="max-width:720px; margin:0 auto; text-align:center;">
+      <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand);">Hacia dónde va Bioptica</span>
+      <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); margin:14px 0 0; letter-spacing:-0.01em;">Más allá de la historia clínica</h2>
+      <p style="font-size:16px; line-height:1.7; color:var(--ink-soft); margin-top:16px;">Estamos construyendo para que tu óptica no solo registre mejor — también venda más y pierda menos tiempo coordinando con laboratorios.</p>
+    </div>
+    <div class="bp-grid-2" style="max-width:920px; margin:56px auto 0; gap:28px;">
+      <div style="background:var(--white); border:1.5px dashed var(--line); border-radius:16px; padding:26px;">
+        <span style="display:inline-block; font-size:10px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-faint); background:var(--bg-alt); border:1px solid var(--line); padding:4px 10px; border-radius:999px;">Próximamente</span>
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--brand-light); display:flex; align-items:center; justify-content:center; color:var(--brand); margin:16px 0 14px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3.5-7.1"></path><path d="M21 4v6h-6"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:17px; color:var(--ink);">Marketing y remarketing con IA</div>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.65; margin-top:8px;">Identificar pacientes con la fórmula vencida o que llevan tiempo sin control, y dejar listos los mensajes para invitarlos a volver — para traer de vuelta a quienes ya confiaron en tu óptica.</p>
+      </div>
+      <div style="background:var(--white); border:1.5px dashed var(--line); border-radius:16px; padding:26px;">
+        <span style="display:inline-block; font-size:10px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-faint); background:var(--bg-alt); border:1px solid var(--line); padding:4px 10px; border-radius:999px;">Próximamente</span>
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--brand-light); display:flex; align-items:center; justify-content:center; color:var(--brand); margin:16px 0 14px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"></rect><path d="M3 7l9-4 9 4"></path><path d="M8 12h8M8 16h5"></path></svg>
+        </div>
+        <div style="font-weight:700; font-size:17px; color:var(--ink);">Seguimiento con laboratorios</div>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.65; margin-top:8px;">Formatos de orden listos para el laboratorio y visibilidad del estado de cada montura o lente en elaboración, sin llamadas ni WhatsApp perdidos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section id="nosotros" class="bp-section" style="background:var(--bg-alt); padding:110px 64px;">
+    <div style="max-width:720px; margin:0 auto; text-align:center;">
+      <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(26px,3.2vw,36px); color:var(--ink); letter-spacing:-0.01em; margin:0;">Detrás de Bioptica</h2>
+      <p style="font-size:16px; line-height:1.75; color:var(--ink-soft); margin-top:18px;">Bioptica está construida por un equipo que trabaja de cerca con procesos de auditoría médica y marketing en salud en Colombia, y que ve todos los días el mismo problema en las ópticas: perder consultas por exceso de papeleo. Por eso lo diseñamos primero para el optómetra, no para el formulario.</p>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section id="contacto" class="bp-section" style="background:var(--brand); padding:130px 64px; text-align:center; color:var(--white);">
+    <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(30px,4vw,48px); letter-spacing:-0.01em; margin:0 auto; max-width:680px;">Más consultas. Menos papeleo. Así de simple.</h2>
+    <p style="font-size:17px; line-height:1.7; color:oklch(88% 0.03 210); margin:18px auto 0; max-width:560px;">Agenda una demo y compruébalo tú mismo: una consulta completa, firmada y enviada, en el tiempo que toma explicarla.</p>
+    <div style="margin-top:36px;">
+      <a href="mailto:%5BCORREO%20DE%20CONTACTO%5D" style="display:inline-flex; align-items:center; gap:10px; background:var(--accent); color:var(--brand-dark); font-weight:700; font-size:16px; padding:16px 30px; border-radius:999px;">Agendar una demo</a>
+    </div>
+    <p style="font-size:14px; color:oklch(78% 0.03 210); margin-top:24px;">[CORREO DE CONTACTO] · [WHATSAPP DE CONTACTO]</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bp-section" style="padding:48px 64px; border-top:1px solid var(--line);">
+    <div style="max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <svg viewBox="-12 0 76 36" width="28" height="13" style="flex-shrink:0;">
+          <defs>
+            <linearGradient id="bioEyeGradFooter" x1="-12" y1="0" x2="64" y2="36" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0B1F3A"></stop>
+              <stop offset="100%" stop-color="#2E6FD9"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M6,18 C13,4 40,3 51,11 L61,18 L51,25 C40,33 13,32 6,18 Z" fill="none" stroke="url(#bioEyeGradFooter)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"></path>
+          <circle cx="27" cy="18" r="8.5" fill="none" stroke="#2E6FD9" stroke-width="2"></circle>
+          <circle cx="27" cy="18" r="6" fill="#0B1F3A"></circle>
+          <circle cx="24.5" cy="15" r="1.6" fill="#ffffff"></circle>
+          <g fill="#0B1F3A">
+            <rect x="0" y="16.5" width="3" height="3"></rect>
+            <rect x="-4" y="12" width="3" height="3"></rect>
+            <rect x="-4" y="21" width="3" height="3"></rect>
+            <rect x="-8.5" y="8" width="2.5" height="2.5"></rect>
+            <rect x="-8.5" y="25" width="2.5" height="2.5"></rect>
+          </g>
+          <g stroke="#2E6FD9" stroke-width="1" fill="none">
+            <path d="M1.5,18 L6,18"></path>
+            <path d="M-2.5,13.5 L4,17"></path>
+            <path d="M-2.5,22.5 L4,19"></path>
+          </g>
+        </svg>
+        <span style="font-family:'Newsreader',serif; font-weight:600; font-size:16px; color:var(--ink);">Bioptica</span>
+      </div>
+      <p style="font-size:13px; color:var(--ink-faint); margin:0; max-width:560px;">© 2026 Bioptica. Software de apoyo clínico — el cumplimiento normativo final debe ser validado por el equipo legal de cada óptica.</p>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
