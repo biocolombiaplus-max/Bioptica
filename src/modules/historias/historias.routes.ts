@@ -3,6 +3,7 @@ import { requireAuth } from '../../middleware/auth';
 import {
   crearHistoriaHandler,
   listarHistoriasPorPacienteHandler,
+  listarHistoriasRecientesHandler,
   obtenerHistoriaHandler,
   formulaPdfHandler,
   enviarFormulaCorreoHandler,
@@ -12,6 +13,7 @@ export const historiasRouter = Router();
 
 historiasRouter.use(requireAuth);
 historiasRouter.post('/', crearHistoriaHandler);
+historiasRouter.get('/recientes', listarHistoriasRecientesHandler);
 historiasRouter.get('/:id/formula.pdf', formulaPdfHandler);
 historiasRouter.post('/:id/enviar-correo', enviarFormulaCorreoHandler);
 historiasRouter.get('/:id', obtenerHistoriaHandler);

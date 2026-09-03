@@ -13,7 +13,7 @@ document.getElementById('form-login').addEventListener('submit', async (e) => {
       body: JSON.stringify({ opticaSlug, email, password }),
     });
     guardarSesion(data);
-    window.location.href = '/pacientes.html';
+    window.location.href = '/dashboard.html';
   } catch (error) {
     errorEl.textContent = error.message;
     errorEl.hidden = false;

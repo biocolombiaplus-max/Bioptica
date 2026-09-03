@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bioptica - Panel principal</title>
+  <link rel="stylesheet" href="/css/estilos.css" />
+</head>
+<body>
+  <header class="barra-superior">
+    <span class="marca">Bioptica</span>
+    <span id="info-sesion" class="info-sesion"></span>
+    <button id="btn-salir" class="boton-secundario">Salir</button>
+  </header>
+
+  <main class="contenedor">
+    <section style="margin: 1.5rem 0;">
+      <h1 id="saludo" style="margin-bottom:0.25rem;">Hola</h1>
+      <p style="color:#6b7280; margin-top:0;">¿Qué quieres hacer hoy?</p>
+    </section>
+
+    <section class="grid-modulos">
+      <a href="/pacientes.html" class="tarjeta-modulo tarjeta-modulo-principal">
+        <div class="icono-modulo">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c4-7 10-10 14-10s10 3 14 10c-4 7-10 10-14 10S6 23 2 16Z" transform="scale(0.75) translate(3,3)"></path><circle cx="16" cy="16" r="4" transform="scale(0.75) translate(3,3)"></circle></svg>
+        </div>
+        <h2>Pacientes e Historias Clínicas</h2>
+        <p>Busca o crea un paciente, dicta la consulta, firma el consentimiento y envía la fórmula.</p>
+      </a>
+
+      <a href="/inventario.html" class="tarjeta-modulo">
+        <div class="icono-modulo">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8l9 5 9-5Z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg>
+        </div>
+        <h2>Inventario</h2>
+        <p>Monturas, lentes y accesorios disponibles en tu óptica.</p>
+      </a>
+
+      <a href="/mi-optica.html" class="tarjeta-modulo">
+        <div class="icono-modulo">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a9 9 0 0 1 0 18 9 9 0 0 1 0-18Z"></path><path d="M3 12h18"></path></svg>
+        </div>
+        <h2>Mi Óptica</h2>
+        <p>Tu logo y color de marca en cada fórmula y documento.</p>
+      </a>
+    </section>
+
+    <section class="tarjeta" style="margin-top:2rem;">
+      <h2>Documentos recientes</h2>
+      <p style="color:#6b7280; margin-top:-0.5rem;">Últimas consultas registradas, con acceso directo a la fórmula y el consentimiento.</p>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:1rem;">
+          <thead>
+            <tr style="text-align:left; border-bottom:2px solid var(--gris-borde);">
+              <th style="padding:0.5rem;">Fecha</th>
+              <th style="padding:0.5rem;">Paciente</th>
+              <th style="padding:0.5rem;">Diagnóstico</th>
+              <th style="padding:0.5rem;">Consentimiento</th>
+              <th style="padding:0.5rem;"></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-documentos"></tbody>
+        </table>
+      </div>
+      <p id="mensaje-vacio" hidden style="color:#6b7280;">Todavía no hay consultas registradas.</p>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -4,6 +4,7 @@ import {
   crearHistoriaClinica,
   listarHistoriasPorPaciente,
   obtenerHistoria,
+  listarHistoriasRecientes,
 } from './historias.repository';
 import { obtenerOptometraPorId } from '../optometras/optometras.repository';
 import { buscarPacientePorId } from '../pacientes/pacientes.repository';
@@ -117,6 +118,16 @@ export const crearHistoriaHandler: RequestHandler = async (req, res, next) => {
       parsed.data
     );
     res.status(201).json(historia);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const listarHistoriasRecientesHandler: RequestHandler = async (req, res, next) => {
+  try {
+    const limite = Math.min(Number(req.query.limite) || 10, 50);
+    const historias = await listarHistoriasRecientes(req.auth!.opticaId, limite);
+    res.json(historias);
   } catch (error) {
     next(error);
   }

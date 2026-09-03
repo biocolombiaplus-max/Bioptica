@@ -163,3 +163,21 @@ export async function obtenerHistoria(opticaId: string, historiaId: string) {
   );
   return result.rows[0] ?? null;
 }
+
+export async function listarHistoriasRecientes(opticaId: string, limite: number) {
+  const result = await pool.query(
+    `SELECT
+      h.id, h.paciente_id, h.fecha_atencion, h.diagnosticos,
+      h.formula_od_esfera, h.formula_oi_esfera,
+      p.nombre_completo AS paciente_nombre, p.numero_documento AS paciente_documento,
+      (c.id IS NOT NULL) AS tiene_consentimiento
+     FROM historias_clinicas h
+     JOIN pacientes p ON p.id = h.paciente_id
+     LEFT JOIN consentimientos_informados c ON c.historia_clinica_id = h.id
+     WHERE h.optica_id = $1
+     ORDER BY h.fecha_atencion DESC
+     LIMIT $2`,
+    [opticaId, limite]
+  );
+  return result.rows;
+}
