@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bioptica - Panel de superadmin</title>
+  <link rel="stylesheet" href="/css/estilos.css" />
+</head>
+<body>
+  <header class="barra-superior">
+    <span class="marca">Bioptica · Superadmin</span>
+    <span id="info-sesion" class="info-sesion"></span>
+    <button id="btn-salir" class="boton-secundario">Salir</button>
+  </header>
+
+  <main class="contenedor">
+    <section class="tarjeta">
+      <h1>Ópticas registradas</h1>
+      <p style="color:#6b7280; margin-top:-0.5rem;">Activa o desactiva el módulo de historia clínica por óptica.</p>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:1rem;">
+          <thead>
+            <tr style="text-align:left; border-bottom:2px solid var(--gris-borde);">
+              <th style="padding:0.5rem;">Óptica</th>
+              <th style="padding:0.5rem;">Código</th>
+              <th style="padding:0.5rem;">Optómetras</th>
+              <th style="padding:0.5rem;">Pacientes</th>
+              <th style="padding:0.5rem;">Activa</th>
+              <th style="padding:0.5rem;">Historia clínica</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-opticas"></tbody>
+        </table>
+      </div>
+      <p id="mensaje-error" class="mensaje-error" hidden></p>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Registrar nueva óptica</h2>
+      <p style="color:#6b7280; margin-top:-0.5rem;">Crea la óptica y su primer optómetra administrador en un solo paso.</p>
+
+      <form id="form-nueva-optica" class="grid-form" style="margin-top:1rem;">
+        <div><label for="nombre">Nombre de la óptica</label><input type="text" id="nombre" required /></div>
+        <div><label for="slug">Código (para el login)</label><input type="text" id="slug" placeholder="ej: optica-visual-total" required /></div>
+        <div><label for="nit">NIT</label><input type="text" id="nit" /></div>
+        <div><label for="emailOptica">Correo de la óptica</label><input type="email" id="emailOptica" /></div>
+        <div class="col-2">
+          <label style="display:flex; align-items:center; gap:0.5rem; font-weight:400;">
+            <input type="checkbox" id="moduloHistoriaClinica" style="width:auto;" />
+            Activar módulo de historia clínica desde ya
+          </label>
+        </div>
+
+        <div class="col-2"><hr style="border:none; border-top:1px solid var(--gris-borde); margin:0.5rem 0;" /></div>
+
+        <div><label for="nombreAdmin">Nombre del optómetra administrador</label><input type="text" id="nombreAdmin" required /></div>
+        <div><label for="registroAdmin">Registro profesional</label><input type="text" id="registroAdmin" required /></div>
+        <div><label for="emailAdmin">Correo del optómetra</label><input type="email" id="emailAdmin" required /></div>
+        <div><label for="passwordAdmin">Contraseña inicial</label><input type="password" id="passwordAdmin" minlength="6" required /></div>
+
+        <div class="col-2">
+          <button type="submit">Crear óptica</button>
+        </div>
+      </form>
+      <p id="mensaje-error-crear" class="mensaje-error" hidden></p>
+      <p id="mensaje-exito-crear" class="mensaje-exito" hidden></p>
+    </section>
+  </main>
+
+  <script src="/js/superadmin-panel.js"></script>
+</body>
+</html>

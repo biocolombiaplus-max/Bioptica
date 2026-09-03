@@ -19,10 +19,21 @@ async function seed() {
     [opticaId, 'Optómetra Demo', 'demo@opticademo.test', passwordHash, 'TP-12345']
   );
 
+  const superadminPasswordHash = await hashPassword('super1234');
+  await pool.query(
+    `INSERT INTO superadmins (nombre_completo, email, password_hash)
+     VALUES ($1,$2,$3)
+     ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash`,
+    ['Superadmin Bioptica', 'superadmin@bioptica.test', superadminPasswordHash]
+  );
+
   console.log('Seed completo. Login de prueba:');
   console.log('  opticaSlug: optica-demo');
   console.log('  email: demo@opticademo.test');
   console.log('  password: demo1234');
+  console.log('Login de superadmin:');
+  console.log('  email: superadmin@bioptica.test');
+  console.log('  password: super1234');
   await pool.end();
 }
 
