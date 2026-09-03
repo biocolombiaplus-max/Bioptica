@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bioptica - Inventario</title>
+  <link rel="stylesheet" href="/css/estilos.css" />
+</head>
+<body>
+  <header class="barra-superior">
+    <span class="marca">Bioptica</span>
+    <nav style="display:flex; gap:1rem; align-items:center;">
+      <a href="/pacientes.html" style="color:var(--azul); text-decoration:none; font-size:0.9rem;">Pacientes</a>
+      <a href="/inventario.html" style="color:var(--azul-oscuro); text-decoration:none; font-size:0.9rem; font-weight:700;">Inventario</a>
+    </nav>
+    <span id="info-sesion" class="info-sesion"></span>
+    <button id="btn-salir" class="boton-secundario">Salir</button>
+  </header>
+
+  <main class="contenedor">
+    <section class="tarjeta">
+      <h1>Inventario</h1>
+      <p style="color:#6b7280; margin-top:-0.5rem;">Monturas, lentes y accesorios disponibles en tu óptica.</p>
+
+      <form id="form-producto" class="grid-form" style="margin-top:1rem;">
+        <div>
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" required />
+        </div>
+        <div>
+          <label for="categoria">Categoría</label>
+          <select id="categoria">
+            <option value="montura">Montura</option>
+            <option value="lente">Lente</option>
+            <option value="accesorio">Accesorio</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div>
+          <label for="sku">SKU / referencia</label>
+          <input type="text" id="sku" />
+        </div>
+        <div>
+          <label for="cantidadDisponible">Cantidad disponible</label>
+          <input type="number" id="cantidadDisponible" min="0" value="0" required />
+        </div>
+        <div>
+          <label for="precioVenta">Precio de venta</label>
+          <input type="number" id="precioVenta" min="0" step="0.01" />
+        </div>
+        <div class="col-2">
+          <button type="submit" id="btn-guardar-producto">Agregar producto</button>
+          <button type="button" id="btn-cancelar-edicion" class="boton-secundario" hidden>Cancelar edición</button>
+        </div>
+      </form>
+      <p id="mensaje-error" class="mensaje-error" hidden></p>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Productos registrados</h2>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+          <thead>
+            <tr style="text-align:left; border-bottom:2px solid var(--gris-borde);">
+              <th style="padding:0.5rem;">Nombre</th>
+              <th style="padding:0.5rem;">Categoría</th>
+              <th style="padding:0.5rem;">SKU</th>
+              <th style="padding:0.5rem;">Cantidad</th>
+              <th style="padding:0.5rem;">Precio</th>
+              <th style="padding:0.5rem;"></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-productos"></tbody>
+        </table>
+      </div>
+      <p id="mensaje-vacio" hidden style="color:#6b7280;">Todavía no has registrado productos.</p>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/inventario.js"></script>
+</body>
+</html>

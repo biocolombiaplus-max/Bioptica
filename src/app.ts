@@ -7,6 +7,7 @@ import { historiasRouter } from './modules/historias/historias.routes';
 import { cie10Router } from './modules/cie10/cie10.routes';
 import { opticasRouter } from './modules/opticas/opticas.routes';
 import { consentimientosRouter } from './modules/consentimientos/consentimientos.routes';
+import { inventarioRouter } from './modules/inventario/inventario.routes';
 import { errorHandler } from './middleware/errorHandler';
 
 export const app = express();
@@ -24,6 +25,7 @@ app.use('/api/historias', historiasRouter);
 app.use('/api/cie10', cie10Router);
 app.use('/api/opticas', opticasRouter);
 app.use('/api/consentimientos', consentimientosRouter);
+app.use('/api/inventario', inventarioRouter);
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
