@@ -4,6 +4,7 @@ import {
   crearPacienteHandler,
   listarPacientesHandler,
   buscarPacienteHandler,
+  obtenerPacienteHandler,
 } from './pacientes.controller';
 
 export const pacientesRouter = Router();
@@ -12,3 +13,4 @@ pacientesRouter.use(requireAuth);
 pacientesRouter.post('/', crearPacienteHandler);
 pacientesRouter.get('/', listarPacientesHandler);
 pacientesRouter.get('/documento/:numeroDocumento', buscarPacienteHandler);
+pacientesRouter.get('/:id', obtenerPacienteHandler);

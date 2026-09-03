@@ -1,6 +1,11 @@
 import { RequestHandler } from 'express';
 import { z } from 'zod';
-import { crearPaciente, listarPacientes, buscarPacientePorDocumento } from './pacientes.repository';
+import {
+  crearPaciente,
+  listarPacientes,
+  buscarPacientePorDocumento,
+  buscarPacientePorId,
+} from './pacientes.repository';
 
 const pacienteSchema = z.object({
   tipoDocumento: z.string().min(1),
@@ -46,6 +51,19 @@ export const listarPacientesHandler: RequestHandler = async (req, res, next) => 
 export const buscarPacienteHandler: RequestHandler = async (req, res, next) => {
   try {
     const paciente = await buscarPacientePorDocumento(req.auth!.opticaId, req.params.numeroDocumento);
+    if (!paciente) {
+      res.status(404).json({ error: 'Paciente no encontrado' });
+      return;
+    }
+    res.json(paciente);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const obtenerPacienteHandler: RequestHandler = async (req, res, next) => {
+  try {
+    const paciente = await buscarPacientePorId(req.auth!.opticaId, req.params.id);
     if (!paciente) {
       res.status(404).json({ error: 'Paciente no encontrado' });
       return;

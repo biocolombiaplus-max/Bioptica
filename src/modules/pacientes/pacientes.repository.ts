@@ -51,3 +51,11 @@ export async function buscarPacientePorDocumento(opticaId: string, numeroDocumen
   );
   return result.rows[0] ?? null;
 }
+
+export async function buscarPacientePorId(opticaId: string, id: string) {
+  const result = await pool.query(
+    `SELECT * FROM pacientes WHERE optica_id = $1 AND id = $2`,
+    [opticaId, id]
+  );
+  return result.rows[0] ?? null;
+}

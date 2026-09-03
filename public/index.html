@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bioptica</title>
+</head>
+<body>
+  <script>
+    const token = localStorage.getItem('bioptica_token');
+    window.location.href = token ? '/pacientes.html' : '/login.html';
+  </script>
+</body>
+</html>

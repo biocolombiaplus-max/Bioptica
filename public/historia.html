@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bioptica - Historia clínica</title>
+  <link rel="stylesheet" href="/css/estilos.css" />
+</head>
+<body>
+  <header class="barra-superior">
+    <span class="marca">Bioptica</span>
+    <span id="info-sesion" class="info-sesion"></span>
+    <button id="btn-salir" class="boton-secundario">Salir</button>
+  </header>
+
+  <main class="contenedor">
+    <a href="/pacientes.html" class="enlace-volver">&larr; Buscar otro paciente</a>
+
+    <section id="tarjeta-paciente" class="tarjeta">Cargando paciente...</section>
+
+    <section class="tarjeta">
+      <h2>Historial de consultas anteriores</h2>
+      <div id="lista-historial">Cargando...</div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Nueva consulta</h2>
+      <form id="form-historia">
+
+        <fieldset>
+          <legend>Anamnesis</legend>
+          <label for="motivoConsulta">Motivo de consulta</label>
+          <textarea id="motivoConsulta" rows="2"></textarea>
+          <label for="enfermedadActual">Enfermedad actual</label>
+          <textarea id="enfermedadActual" rows="2"></textarea>
+          <div class="grid-form">
+            <div><label for="antecedentesPersonalesOculares">Antecedentes oculares</label><textarea id="antecedentesPersonalesOculares" rows="2"></textarea></div>
+            <div><label for="antecedentesPersonalesSistemicos">Antecedentes sistémicos</label><textarea id="antecedentesPersonalesSistemicos" rows="2"></textarea></div>
+            <div><label for="antecedentesFamiliares">Antecedentes familiares</label><textarea id="antecedentesFamiliares" rows="2"></textarea></div>
+            <div><label for="antecedentesQuirurgicos">Antecedentes quirúrgicos</label><textarea id="antecedentesQuirurgicos" rows="2"></textarea></div>
+          </div>
+          <label for="alergias">Alergias</label>
+          <input type="text" id="alergias" />
+        </fieldset>
+
+        <fieldset>
+          <legend>Agudeza visual</legend>
+          <table class="tabla-ojos">
+            <thead><tr><th></th><th>OD</th><th>OI</th><th>AO</th></tr></thead>
+            <tbody>
+              <tr><td>Sin corrección — lejos</td>
+                <td><input id="avScLejosOd" /></td><td><input id="avScLejosOi" /></td><td><input id="avScLejosAo" /></td></tr>
+              <tr><td>Sin corrección — cerca</td>
+                <td><input id="avScCercaOd" /></td><td><input id="avScCercaOi" /></td><td><input id="avScCercaAo" /></td></tr>
+              <tr><td>Con corrección actual — lejos</td>
+                <td><input id="avCcLejosOd" /></td><td><input id="avCcLejosOi" /></td><td><input id="avCcLejosAo" /></td></tr>
+              <tr><td>Con corrección actual — cerca</td>
+                <td><input id="avCcCercaOd" /></td><td><input id="avCcCercaOi" /></td><td><input id="avCcCercaAo" /></td></tr>
+            </tbody>
+          </table>
+        </fieldset>
+
+        <fieldset>
+          <legend>Refracción</legend>
+          <table class="tabla-ojos">
+            <thead><tr><th></th><th>Esfera</th><th>Cilindro</th><th>Eje</th></tr></thead>
+            <tbody>
+              <tr><td>Retinoscopia OD</td><td><input id="retinoscopiaOdEsfera" /></td><td><input id="retinoscopiaOdCilindro" /></td><td><input id="retinoscopiaOdEje" /></td></tr>
+              <tr><td>Retinoscopia OI</td><td><input id="retinoscopiaOiEsfera" /></td><td><input id="retinoscopiaOiCilindro" /></td><td><input id="retinoscopiaOiEje" /></td></tr>
+              <tr><td>Subjetivo OD</td><td><input id="subjetivoOdEsfera" /></td><td><input id="subjetivoOdCilindro" /></td><td><input id="subjetivoOdEje" /></td></tr>
+              <tr><td>Subjetivo OI</td><td><input id="subjetivoOiEsfera" /></td><td><input id="subjetivoOiCilindro" /></td><td><input id="subjetivoOiEje" /></td></tr>
+            </tbody>
+          </table>
+          <div class="grid-form">
+            <div><label for="queratometriaOd">Queratometría OD</label><input id="queratometriaOd" /></div>
+            <div><label for="queratometriaOi">Queratometría OI</label><input id="queratometriaOi" /></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Otros hallazgos del examen visual</legend>
+          <div class="grid-form">
+            <div><label for="visionColores">Visión de colores</label><input id="visionColores" /></div>
+            <div><label for="motilidadOcular">Motilidad ocular</label><input id="motilidadOcular" /></div>
+            <div><label for="coverTest">Cover test</label><input id="coverTest" /></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Examen físico ocular</legend>
+          <label for="biomicroscopia">Biomicroscopia (segmento anterior)</label>
+          <textarea id="biomicroscopia" rows="2"></textarea>
+          <div class="grid-form">
+            <div><label for="tonometriaOd">Tonometría OD (mmHg)</label><input id="tonometriaOd" /></div>
+            <div><label for="tonometriaOi">Tonometría OI (mmHg)</label><input id="tonometriaOi" /></div>
+          </div>
+          <label for="oftalmoscopia">Oftalmoscopia / fondo de ojo (segmento posterior)</label>
+          <textarea id="oftalmoscopia" rows="2"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Diagnóstico y plan</legend>
+          <label for="buscarDiagnostico">Buscar diagnóstico (CIE-10)</label>
+          <div class="fila-form">
+            <input type="text" id="buscarDiagnostico" list="lista-cie10" placeholder="Ej: miopía, H52.1" />
+            <datalist id="lista-cie10"></datalist>
+            <button type="button" id="btn-agregar-diagnostico">Agregar</button>
+          </div>
+          <ul id="chips-diagnosticos" class="chips"></ul>
+
+          <label for="planManejo">Plan de manejo / recomendaciones</label>
+          <textarea id="planManejo" rows="2"></textarea>
+
+          <label for="fechaProximoControl">Fecha de próximo control</label>
+          <input type="date" id="fechaProximoControl" />
+        </fieldset>
+
+        <fieldset>
+          <legend>Fórmula óptica final</legend>
+          <table class="tabla-ojos">
+            <thead><tr><th></th><th>Esfera</th><th>Cilindro</th><th>Eje</th><th>Adición</th></tr></thead>
+            <tbody>
+              <tr><td>OD</td><td><input id="formulaOdEsfera" /></td><td><input id="formulaOdCilindro" /></td><td><input id="formulaOdEje" /></td><td><input id="formulaOdAdicion" /></td></tr>
+              <tr><td>OI</td><td><input id="formulaOiEsfera" /></td><td><input id="formulaOiCilindro" /></td><td><input id="formulaOiEje" /></td><td><input id="formulaOiAdicion" /></td></tr>
+            </tbody>
+          </table>
+          <div class="grid-form">
+            <div><label for="distanciaInterpupilar">Distancia interpupilar</label><input id="distanciaInterpupilar" /></div>
+            <div><label for="tipoLente">Tipo de lente</label><input id="tipoLente" /></div>
+            <div><label for="materialLente">Material</label><input id="materialLente" /></div>
+            <div><label for="tratamientos">Tratamientos</label><input id="tratamientos" /></div>
+          </div>
+        </fieldset>
+
+        <div id="firma-preview" class="firma-preview"></div>
+
+        <button type="submit">Guardar historia clínica</button>
+        <p id="mensaje-guardado" class="mensaje-exito" hidden>Historia guardada correctamente.</p>
+        <p id="mensaje-error-form" class="mensaje-error" hidden></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/historia.js"></script>
+</body>
+</html>

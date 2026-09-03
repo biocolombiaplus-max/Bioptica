@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bioptica - Pacientes</title>
+  <link rel="stylesheet" href="/css/estilos.css" />
+</head>
+<body>
+  <header class="barra-superior">
+    <span class="marca">Bioptica</span>
+    <span id="info-sesion" class="info-sesion"></span>
+    <button id="btn-salir" class="boton-secundario">Salir</button>
+  </header>
+
+  <main class="contenedor">
+    <section class="tarjeta">
+      <h1>Buscar paciente por documento</h1>
+      <form id="form-buscar" class="fila-form">
+        <input type="text" id="numeroDocumento" placeholder="Número de documento" required />
+        <button type="submit">Buscar</button>
+      </form>
+    </section>
+
+    <section id="resultado-busqueda" hidden class="tarjeta"></section>
+
+    <section id="form-nuevo-paciente" hidden class="tarjeta">
+      <h2>Paciente no encontrado — crear nuevo</h2>
+      <form id="form-crear-paciente">
+        <div class="grid-form">
+          <div>
+            <label for="tipoDocumento">Tipo de documento</label>
+            <select id="tipoDocumento">
+              <option value="CC">Cédula de ciudadanía</option>
+              <option value="TI">Tarjeta de identidad</option>
+              <option value="CE">Cédula de extranjería</option>
+              <option value="RC">Registro civil</option>
+              <option value="PA">Pasaporte</option>
+            </select>
+          </div>
+          <div>
+            <label for="nuevoNumeroDocumento">Número de documento</label>
+            <input type="text" id="nuevoNumeroDocumento" required />
+          </div>
+          <div class="col-2">
+            <label for="nombreCompleto">Nombre completo</label>
+            <input type="text" id="nombreCompleto" required />
+          </div>
+          <div>
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <input type="date" id="fechaNacimiento" />
+          </div>
+          <div>
+            <label for="sexo">Sexo</label>
+            <select id="sexo">
+              <option value="">-</option>
+              <option value="Femenino">Femenino</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          <div>
+            <label for="epsRegimen">EPS / régimen</label>
+            <input type="text" id="epsRegimen" />
+          </div>
+          <div>
+            <label for="telefono">Teléfono</label>
+            <input type="text" id="telefono" />
+          </div>
+          <div>
+            <label for="correo">Correo</label>
+            <input type="email" id="correo" />
+          </div>
+          <div>
+            <label for="ocupacion">Ocupación</label>
+            <input type="text" id="ocupacion" />
+          </div>
+          <div class="col-2">
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" />
+          </div>
+        </div>
+        <button type="submit">Crear paciente</button>
+      </form>
+    </section>
+
+    <p id="mensaje-error" class="mensaje-error" hidden></p>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/pacientes.js"></script>
+</body>
+</html>
