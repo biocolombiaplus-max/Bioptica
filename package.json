@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc && mkdir -p dist/db/migrations && cp src/db/migrations/*.sql dist/db/migrations/",
-    "start": "npm run migrate:prod && node dist/server.js",
+    "start": "npm run migrate:prod && node dist/db/bootstrapSuperadmin.js && node dist/server.js",
     "migrate": "tsx src/db/migrate.ts",
     "migrate:prod": "node dist/db/migrate.js",
     "seed": "tsx src/db/seed.ts"
