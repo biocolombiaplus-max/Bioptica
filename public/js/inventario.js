@@ -40,6 +40,11 @@ function renderProductos(productos) {
     .map(
       (p) => `
     <tr style="border-bottom:1px solid var(--gris-borde);" data-id="${p.id}">
+      <td style="padding:0.5rem;">${
+        p.imagen_url
+          ? `<img src="${p.imagen_url}" alt="${p.nombre}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" />`
+          : `<div style="width:40px; height:40px; border-radius:6px; background:var(--gris-fondo);"></div>`
+      }</td>
       <td style="padding:0.5rem;">${p.nombre}</td>
       <td style="padding:0.5rem;">${CATEGORIAS[p.categoria] ?? p.categoria}</td>
       <td style="padding:0.5rem;">${p.sku ?? '—'}</td>
@@ -80,6 +85,17 @@ async function cargarProductos() {
   }
 }
 
+function mostrarPreviewImagen(url) {
+  const preview = document.getElementById('preview-imagen-producto');
+  if (url) {
+    preview.src = url;
+    preview.hidden = false;
+  } else {
+    preview.src = '';
+    preview.hidden = true;
+  }
+}
+
 function iniciarEdicion(producto) {
   idEnEdicion = producto.id;
   document.getElementById('nombre').value = producto.nombre;
@@ -87,6 +103,8 @@ function iniciarEdicion(producto) {
   document.getElementById('sku').value = producto.sku ?? '';
   document.getElementById('cantidadDisponible').value = producto.cantidad_disponible;
   document.getElementById('precioVenta').value = producto.precio_venta ?? '';
+  document.getElementById('imagenUrl').value = producto.imagen_url ?? '';
+  mostrarPreviewImagen(producto.imagen_url);
   document.getElementById('btn-guardar-producto').textContent = 'Guardar cambios';
   document.getElementById('btn-cancelar-edicion').hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -95,9 +113,24 @@ function iniciarEdicion(producto) {
 function cancelarEdicion() {
   idEnEdicion = null;
   document.getElementById('form-producto').reset();
+  document.getElementById('imagenUrl').value = '';
+  mostrarPreviewImagen(null);
   document.getElementById('btn-guardar-producto').textContent = 'Agregar producto';
   document.getElementById('btn-cancelar-edicion').hidden = true;
 }
+
+document.getElementById('archivoImagenProducto').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  ocultarError();
+  try {
+    const dataUri = await comprimirImagen(file, { maxAncho: 500, calidad: 0.75 });
+    document.getElementById('imagenUrl').value = dataUri;
+    mostrarPreviewImagen(dataUri);
+  } catch (error) {
+    mostrarError(error.message);
+  }
+});
 
 document.getElementById('btn-cancelar-edicion').addEventListener('click', cancelarEdicion);
 
@@ -108,12 +141,15 @@ document.getElementById('form-producto').addEventListener('submit', async (e) =>
   const cantidad = Number(document.getElementById('cantidadDisponible').value);
   const precioValor = document.getElementById('precioVenta').value;
 
+  const imagenUrl = document.getElementById('imagenUrl').value.trim();
+
   const payload = {
     nombre: document.getElementById('nombre').value.trim(),
     categoria: document.getElementById('categoria').value,
     sku: document.getElementById('sku').value.trim() || undefined,
     cantidadDisponible: cantidad,
     precioVenta: precioValor === '' ? undefined : Number(precioValor),
+    imagenUrl: imagenUrl || undefined,
   };
 
   try {

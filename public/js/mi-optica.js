@@ -27,7 +27,26 @@ function actualizarVistaPrevia() {
   }
 }
 
-document.getElementById('logoUrl').addEventListener('input', actualizarVistaPrevia);
+document.getElementById('archivoLogo').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const errorEl = document.getElementById('mensaje-error');
+  errorEl.hidden = true;
+  try {
+    const dataUri = await comprimirImagen(file, { maxAncho: 400, calidad: 0.85 });
+    document.getElementById('logoUrl').value = dataUri;
+    document.getElementById('logoUrlManual').value = '';
+    actualizarVistaPrevia();
+  } catch (error) {
+    errorEl.textContent = error.message;
+    errorEl.hidden = false;
+  }
+});
+
+document.getElementById('logoUrlManual').addEventListener('input', (e) => {
+  document.getElementById('logoUrl').value = e.target.value.trim();
+  actualizarVistaPrevia();
+});
 document.getElementById('colorPrimario').addEventListener('input', () => {
   const valor = document.getElementById('colorPrimario').value.trim();
   if (/^#[0-9a-fA-F]{6}$/.test(valor)) {
@@ -43,7 +62,12 @@ document.getElementById('colorPrimarioPicker').addEventListener('input', (e) => 
 async function cargarOptica() {
   try {
     const optica = await apiFetch('/api/opticas/me');
-    if (optica.logo_url) document.getElementById('logoUrl').value = optica.logo_url;
+    if (optica.logo_url) {
+      document.getElementById('logoUrl').value = optica.logo_url;
+      if (/^https?:\/\//.test(optica.logo_url)) {
+        document.getElementById('logoUrlManual').value = optica.logo_url;
+      }
+    }
     if (optica.color_primario) document.getElementById('colorPrimario').value = optica.color_primario;
     actualizarVistaPrevia();
   } catch (error) {

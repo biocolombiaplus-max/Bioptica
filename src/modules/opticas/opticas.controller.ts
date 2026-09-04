@@ -2,8 +2,16 @@ import { RequestHandler } from 'express';
 import { z } from 'zod';
 import { obtenerOpticaPorId, actualizarBranding } from './opticas.repository';
 
+const logoUrlSchema = z
+  .string()
+  .max(4_000_000, 'La imagen es demasiado grande')
+  .refine(
+    (valor) => /^https?:\/\//.test(valor) || /^data:image\/(png|jpeg|jpg|webp);base64,/.test(valor),
+    'Debe ser una URL http(s) o una imagen cargada desde tu equipo'
+  );
+
 const brandingSchema = z.object({
-  logoUrl: z.string().url().max(500).optional(),
+  logoUrl: logoUrlSchema.optional(),
   colorPrimario: z
     .string()
     .regex(/^#[0-9a-fA-F]{6}$/, 'Debe ser un color hexadecimal, ej: #1E3A8A')

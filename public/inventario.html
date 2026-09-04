@@ -51,6 +51,12 @@
           <input type="number" id="precioVenta" min="0" step="0.01" />
         </div>
         <div class="col-2">
+          <label for="archivoImagenProducto">Foto del producto (opcional)</label>
+          <input type="file" id="archivoImagenProducto" accept="image/png,image/jpeg,image/webp" />
+          <input type="hidden" id="imagenUrl" />
+          <img id="preview-imagen-producto" src="" alt="Vista previa" hidden style="width:80px; height:80px; object-fit:cover; border-radius:8px; margin-top:0.5rem; border:1px solid var(--gris-borde);" />
+        </div>
+        <div class="col-2">
           <button type="submit" id="btn-guardar-producto">Agregar producto</button>
           <button type="button" id="btn-cancelar-edicion" class="boton-secundario" hidden>Cancelar edición</button>
         </div>
@@ -64,6 +70,7 @@
         <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
           <thead>
             <tr style="text-align:left; border-bottom:2px solid var(--gris-borde);">
+              <th style="padding:0.5rem;"></th>
               <th style="padding:0.5rem;">Nombre</th>
               <th style="padding:0.5rem;">Categoría</th>
               <th style="padding:0.5rem;">SKU</th>
@@ -80,6 +87,7 @@
   </main>
 
   <script src="/js/api.js"></script>
+  <script src="/js/imagenes.js"></script>
   <script src="/js/inventario.js"></script>
 </body>
 </html>

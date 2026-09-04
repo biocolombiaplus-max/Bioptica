@@ -28,8 +28,11 @@
 
       <form id="form-branding" class="grid-form" style="margin-top:1rem;">
         <div class="col-2">
-          <label for="logoUrl">URL de tu logo (imagen pública, ej. https://...)</label>
-          <input type="url" id="logoUrl" placeholder="https://misitio.com/logo.png" />
+          <label for="archivoLogo">Logo de tu óptica</label>
+          <input type="file" id="archivoLogo" accept="image/png,image/jpeg,image/webp" />
+          <input type="hidden" id="logoUrl" />
+          <p style="font-size:0.8rem; color:#6b7280; margin:0.35rem 0 0;">Sube una imagen desde tu computador o celular (PNG, JPG o WEBP). También puedes pegar una URL pública si prefieres.</p>
+          <input type="url" id="logoUrlManual" placeholder="O pega aquí la URL pública de tu logo" style="margin-top:0.5rem;" />
         </div>
         <div>
           <label for="colorPrimario">Color de marca</label>
@@ -60,6 +63,7 @@
   </main>
 
   <script src="/js/api.js"></script>
+  <script src="/js/imagenes.js"></script>
   <script src="/js/mi-optica.js"></script>
 </body>
 </html>

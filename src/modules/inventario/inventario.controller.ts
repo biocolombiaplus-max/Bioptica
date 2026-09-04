@@ -7,12 +7,21 @@ import {
   eliminarProducto,
 } from './inventario.repository';
 
+const imagenUrlSchema = z
+  .string()
+  .max(4_000_000, 'La imagen es demasiado grande')
+  .refine(
+    (valor) => /^https?:\/\//.test(valor) || /^data:image\/(png|jpeg|jpg|webp);base64,/.test(valor),
+    'Debe ser una URL http(s) o una imagen cargada desde tu equipo'
+  );
+
 const productoSchema = z.object({
   nombre: z.string().min(1).max(200),
   categoria: z.enum(['montura', 'lente', 'accesorio', 'otro']),
   sku: z.string().max(100).optional(),
   cantidadDisponible: z.number().int().min(0),
   precioVenta: z.number().min(0).optional(),
+  imagenUrl: imagenUrlSchema.optional(),
 });
 
 export const crearProductoHandler: RequestHandler = async (req, res, next) => {

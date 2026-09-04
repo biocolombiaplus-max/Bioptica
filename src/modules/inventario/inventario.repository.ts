@@ -6,14 +6,23 @@ export interface ProductoInput {
   sku?: string;
   cantidadDisponible: number;
   precioVenta?: number;
+  imagenUrl?: string;
 }
 
 export async function crearProducto(opticaId: string, data: ProductoInput) {
   const result = await pool.query(
-    `INSERT INTO productos (optica_id, nombre, categoria, sku, cantidad_disponible, precio_venta)
-     VALUES ($1,$2,$3,$4,$5,$6)
+    `INSERT INTO productos (optica_id, nombre, categoria, sku, cantidad_disponible, precio_venta, imagen_url)
+     VALUES ($1,$2,$3,$4,$5,$6,$7)
      RETURNING *`,
-    [opticaId, data.nombre, data.categoria, data.sku ?? null, data.cantidadDisponible, data.precioVenta ?? null]
+    [
+      opticaId,
+      data.nombre,
+      data.categoria,
+      data.sku ?? null,
+      data.cantidadDisponible,
+      data.precioVenta ?? null,
+      data.imagenUrl ?? null,
+    ]
   );
   return result.rows[0];
 }
@@ -37,10 +46,19 @@ export async function obtenerProducto(opticaId: string, id: string) {
 export async function actualizarProducto(opticaId: string, id: string, data: ProductoInput) {
   const result = await pool.query(
     `UPDATE productos SET
-      nombre = $3, categoria = $4, sku = $5, cantidad_disponible = $6, precio_venta = $7, updated_at = now()
+      nombre = $3, categoria = $4, sku = $5, cantidad_disponible = $6, precio_venta = $7, imagen_url = $8, updated_at = now()
      WHERE optica_id = $1 AND id = $2
      RETURNING *`,
-    [opticaId, id, data.nombre, data.categoria, data.sku ?? null, data.cantidadDisponible, data.precioVenta ?? null]
+    [
+      opticaId,
+      id,
+      data.nombre,
+      data.categoria,
+      data.sku ?? null,
+      data.cantidadDisponible,
+      data.precioVenta ?? null,
+      data.imagenUrl ?? null,
+    ]
   );
   return result.rows[0] ?? null;
 }
