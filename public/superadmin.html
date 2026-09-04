@@ -14,9 +14,14 @@
   </header>
 
   <main class="contenedor">
+    <section style="margin: 1.5rem 0;">
+      <h1 style="margin-bottom:0.25rem;">Panel de control</h1>
+      <p style="color:#6b7280; margin-top:0;">Gestiona todas las ópticas clientes y entra directamente a su historia clínica, fórmulas e inventario.</p>
+    </section>
+
     <section class="tarjeta">
-      <h1>Ópticas registradas</h1>
-      <p style="color:#6b7280; margin-top:-0.5rem;">Activa o desactiva el módulo de historia clínica por óptica.</p>
+      <h2 style="margin-top:0;">Ópticas registradas</h2>
+      <p style="color:#6b7280; margin-top:-0.5rem;">Activa o desactiva el módulo de historia clínica, o entra directamente a administrar cada óptica.</p>
       <div style="overflow-x:auto;">
         <table style="width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:1rem;">
           <thead>
@@ -27,6 +32,7 @@
               <th style="padding:0.5rem;">Pacientes</th>
               <th style="padding:0.5rem;">Activa</th>
               <th style="padding:0.5rem;">Historia clínica</th>
+              <th style="padding:0.5rem;"></th>
             </tr>
           </thead>
           <tbody id="tabla-opticas"></tbody>
@@ -67,6 +73,7 @@
     </section>
   </main>
 
+  <script src="/js/api.js"></script>
   <script src="/js/superadmin-panel.js"></script>
 </body>
 </html>

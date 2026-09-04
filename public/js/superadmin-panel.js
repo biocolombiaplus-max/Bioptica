@@ -43,6 +43,9 @@ function renderOpticas(opticas) {
       <td style="padding:0.5rem;">${o.numero_pacientes}</td>
       <td style="padding:0.5rem;"><input type="checkbox" class="toggle-activo" ${o.activo ? 'checked' : ''} /></td>
       <td style="padding:0.5rem;"><input type="checkbox" class="toggle-historia" ${o.modulo_historia_clinica ? 'checked' : ''} /></td>
+      <td style="padding:0.5rem; white-space:nowrap;">
+        <button type="button" class="boton btn-entrar" style="margin-top:0; padding:0.4rem 0.9rem; font-size:0.82rem;" ${o.activo ? '' : 'disabled'}>Entrar a esta óptica →</button>
+      </td>
     </tr>
   `
     )
@@ -60,6 +63,23 @@ function renderOpticas(opticas) {
       actualizarOptica(id, { moduloHistoriaClinica: e.target.checked });
     });
   });
+  tabla.querySelectorAll('.btn-entrar').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const id = e.target.closest('tr').dataset.id;
+      entrarComoOptica(id);
+    });
+  });
+}
+
+async function entrarComoOptica(opticaId) {
+  try {
+    const data = await superadminFetch(`/api/superadmin/opticas/${opticaId}/entrar`, { method: 'POST' });
+    guardarSesion(data);
+    localStorage.setItem('bioptica_via_superadmin', 'true');
+    window.location.href = '/dashboard.html';
+  } catch (error) {
+    mostrarError('mensaje-error', error.message);
+  }
 }
 
 async function actualizarOptica(id, cambios) {

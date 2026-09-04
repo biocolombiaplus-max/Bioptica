@@ -6,8 +6,15 @@
 </head>
 <body>
   <script>
-    const token = localStorage.getItem('bioptica_token');
-    window.location.href = token ? '/dashboard.html' : '/login.html';
+    const tokenOptometra = localStorage.getItem('bioptica_token');
+    const tokenSuperadmin = localStorage.getItem('bioptica_superadmin_token');
+    if (tokenOptometra) {
+      window.location.href = '/dashboard.html';
+    } else if (tokenSuperadmin) {
+      window.location.href = '/superadmin.html';
+    } else {
+      window.location.href = '/login.html';
+    }
   </script>
 </body>
 </html>

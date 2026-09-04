@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { login, AuthError } from './auth.service';
 
 const loginSchema = z.object({
-  opticaSlug: z.string().min(1),
   email: z.string().email(),
   password: z.string().min(1),
 });

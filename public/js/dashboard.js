@@ -7,6 +7,10 @@ document.getElementById('info-sesion').textContent = sesion
 document.getElementById('saludo').textContent = sesion ? `Hola, ${sesion.optometra.nombreCompleto.split(' ')[0]}` : 'Hola';
 document.getElementById('btn-salir').addEventListener('click', cerrarSesion);
 
+if (localStorage.getItem('bioptica_via_superadmin') === 'true') {
+  document.getElementById('btn-volver-superadmin').hidden = false;
+}
+
 function renderDocumentos(historias) {
   const tabla = document.getElementById('tabla-documentos');
   const vacioEl = document.getElementById('mensaje-vacio');

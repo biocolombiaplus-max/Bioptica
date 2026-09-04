@@ -1,12 +1,13 @@
 import { RequestHandler } from 'express';
 import { z } from 'zod';
 import { comparePassword, hashPassword } from '../../utils/password';
-import { signSuperadminToken } from '../../utils/jwt';
+import { signSuperadminToken, signToken } from '../../utils/jwt';
 import {
   obtenerSuperadminPorEmail,
   listarOpticasConConteo,
   crearOpticaConAdmin,
   actualizarEstadoOptica,
+  obtenerAdminOpticaDeOptica,
 } from './superadmin.repository';
 
 const loginSchema = z.object({
@@ -118,6 +119,40 @@ export const actualizarEstadoOpticaHandler: RequestHandler = async (req, res, ne
       return;
     }
     res.json(optica);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const entrarComoOpticaHandler: RequestHandler = async (req, res, next) => {
+  try {
+    const resultado = await obtenerAdminOpticaDeOptica(req.params.id);
+    if (!resultado) {
+      res.status(404).json({ error: 'La óptica no está activa o no tiene un optómetra registrado todavía' });
+      return;
+    }
+
+    const { optometra, optica } = resultado;
+    const token = signToken({
+      optometraId: optometra.id,
+      opticaId: optica.id,
+      rol: optometra.rol,
+    });
+
+    res.json({
+      token,
+      optometra: {
+        id: optometra.id,
+        nombreCompleto: optometra.nombre_completo,
+        email: optometra.email,
+        numeroRegistroProfesional: optometra.numero_registro_profesional,
+        rol: optometra.rol,
+      },
+      optica: {
+        id: optica.id,
+        nombre: optica.nombre,
+      },
+    });
   } catch (error) {
     next(error);
   }

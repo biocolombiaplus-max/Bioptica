@@ -15,6 +15,7 @@ function guardarSesion({ token, optometra, optica }) {
 function cerrarSesion() {
   localStorage.removeItem('bioptica_token');
   localStorage.removeItem('bioptica_sesion');
+  localStorage.removeItem('bioptica_via_superadmin');
   window.location.href = '/login.html';
 }
 

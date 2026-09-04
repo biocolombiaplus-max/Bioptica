@@ -23,6 +23,28 @@ export async function listarOpticasConConteo() {
   return result.rows;
 }
 
+export async function obtenerAdminOpticaDeOptica(opticaId: string) {
+  const opticaResult = await pool.query(
+    `SELECT id, nombre, activo FROM opticas WHERE id = $1`,
+    [opticaId]
+  );
+  const optica = opticaResult.rows[0];
+  if (!optica || !optica.activo) return null;
+
+  const adminResult = await pool.query(
+    `SELECT id, nombre_completo, email, numero_registro_profesional, rol
+     FROM optometras
+     WHERE optica_id = $1 AND activo = true
+     ORDER BY (rol = 'admin_optica') DESC, created_at ASC
+     LIMIT 1`,
+    [opticaId]
+  );
+  const optometra = adminResult.rows[0];
+  if (!optometra) return null;
+
+  return { optometra, optica };
+}
+
 export interface NuevaOpticaInput {
   nombre: string;
   slug: string;
