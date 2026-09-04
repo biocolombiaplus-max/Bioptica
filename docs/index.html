@@ -90,10 +90,10 @@
   </header>
 
   <!-- HERO -->
-  <section class="bp-section" style="position:relative; padding:100px 64px 130px; overflow:hidden;">
+  <section class="bp-section" style="position:relative; padding:clamp(56px,11vw,100px) 64px clamp(64px,14vw,130px); overflow:hidden;">
     <div style="position:absolute; top:-120px; right:-160px; width:560px; height:560px; border-radius:50%; background:var(--brand-light); opacity:0.55; filter:blur(40px); z-index:0; pointer-events:none;"></div>
 
-    <div class="bp-grid-2" style="position:relative; z-index:1; max-width:1280px; margin:0 auto; align-items:center; gap:72px;">
+    <div class="bp-grid-2" style="position:relative; z-index:1; max-width:1280px; margin:0 auto; align-items:center; gap:clamp(36px,8vw,72px);">
       <div>
         <span style="display:inline-block; font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand); background:var(--brand-light); padding:7px 14px; border-radius:999px;">Historia clínica de optometría + IA</span>
         <h1 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(38px,5vw,64px); line-height:1.05; color:var(--ink); margin:24px 0 0; letter-spacing:-0.02em;">Deja de redactar.<br>Solo habla.</h1>
@@ -187,12 +187,12 @@
   </section>
 
   <!-- PROBLEMA -->
-  <section class="bp-section" style="background:var(--bg-alt); padding:110px 64px;">
+  <section class="bp-section" style="background:var(--bg-alt); padding:clamp(56px,11vw,110px) 64px;">
     <div style="max-width:820px; margin:0 auto; text-align:center;">
       <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); letter-spacing:-0.01em; margin:0;">Cada historia escrita a mano es tiempo que no dedicas a atender pacientes</h2>
       <p style="font-size:17px; line-height:1.7; color:var(--ink-soft); margin:20px auto 0; max-width:680px;">Entre examinar, redactar la anamnesis, transcribir la refracción y diligenciar cada campo de la Resolución 3100 a mano, buena parte de la jornada de un optómetra se va en digitar — no en atender. Ese tiempo tiene un costo directo sobre cuántas citas caben en el día.</p>
     </div>
-    <div class="bp-grid-3" style="max-width:1000px; margin:56px auto 0;">
+    <div class="bp-grid-3" style="max-width:1000px; margin:clamp(32px,7vw,56px) auto 0;">
       <div style="text-align:center; padding:8px;">
         <div style="width:52px;height:52px;border-radius:14px;background:var(--white); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--brand); margin:0 auto 16px;">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
@@ -218,12 +218,12 @@
   </section>
 
   <!-- COMO FUNCIONA -->
-  <section id="como-funciona" class="bp-section" style="padding:130px 64px;">
+  <section id="como-funciona" class="bp-section" style="padding:clamp(60px,13vw,130px) 64px;">
     <div style="max-width:720px; margin:0 auto; text-align:center;">
       <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand);">Cómo funciona</span>
       <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); margin:14px 0 0; letter-spacing:-0.01em;">De la consulta a la fórmula firmada, sin escribir de más</h2>
     </div>
-    <div class="bp-grid-4" style="max-width:1280px; margin:64px auto 0;">
+    <div class="bp-grid-4" style="max-width:1280px; margin:clamp(36px,7vw,64px) auto 0;">
       <div style="padding:28px 22px; background:var(--bg-alt); border-radius:18px; border:1px solid var(--line); height:100%;">
         <div style="font-family:'Newsreader',serif; font-size:15px; font-weight:600; color:var(--brand); margin-bottom:16px;">01</div>
         <div style="width:44px;height:44px;border-radius:12px;background:var(--white); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--brand); margin-bottom:18px;">
@@ -260,11 +260,11 @@
   </section>
 
   <!-- MOCKUPS -->
-  <section class="bp-section" style="background:var(--bg-alt); padding:130px 64px;">
+  <section class="bp-section" style="background:var(--bg-alt); padding:clamp(60px,13vw,130px) 64px;">
     <div style="max-width:720px; margin:0 auto; text-align:center;">
       <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); margin:0; letter-spacing:-0.01em;">Lo que queda listo al terminar la consulta</h2>
     </div>
-    <div class="bp-grid-4" style="max-width:1280px; margin:56px auto 0; align-items:stretch;">
+    <div class="bp-grid-4" style="max-width:1280px; margin:clamp(32px,7vw,56px) auto 0; align-items:stretch;">
 
       <div style="background:var(--white); border-radius:18px; border:1px solid var(--line); overflow:hidden; box-shadow:0 20px 40px -24px color-mix(in oklch, var(--ink) 20%, transparent); display:flex; flex-direction:column;">
         <div style="padding:20px 22px; border-bottom:1px solid var(--line);">
@@ -341,8 +341,8 @@
   </section>
 
   <!-- CUMPLIMIENTO -->
-  <section id="cumplimiento" class="bp-section" style="padding:130px 64px;">
-    <div class="bp-grid-2" style="max-width:1200px; margin:0 auto; align-items:center; gap:72px;">
+  <section id="cumplimiento" class="bp-section" style="padding:clamp(60px,13vw,130px) 64px;">
+    <div class="bp-grid-2" style="max-width:1200px; margin:0 auto; align-items:center; gap:clamp(36px,8vw,72px);">
       <div>
         <div style="width:52px;height:52px;border-radius:14px;background:var(--brand-light); display:flex; align-items:center; justify-content:center; color:var(--brand); margin-bottom:22px;">
           <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"></path><path d="M9 12l2 2 4-4"></path></svg>
@@ -371,12 +371,12 @@
   </section>
 
   <!-- MULTI-OPTICA -->
-  <section class="bp-section" style="background:var(--brand-dark); padding:130px 64px; color:var(--white);">
+  <section class="bp-section" style="background:var(--brand-dark); padding:clamp(60px,13vw,130px) 64px; color:var(--white);">
     <div style="max-width:720px; margin:0 auto; text-align:center;">
       <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:oklch(80% 0.05 210);">Multi-óptica</span>
       <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); margin:14px 0 0; letter-spacing:-0.01em;">Una plataforma. Cada óptica, su propio mundo.</h2>
     </div>
-    <div class="bp-grid-3" style="max-width:1100px; margin:64px auto 0;">
+    <div class="bp-grid-3" style="max-width:1100px; margin:clamp(36px,7vw,64px) auto 0;">
       <div style="text-align:center; padding:8px;">
         <div style="width:52px;height:52px;border-radius:14px;background:oklch(32% 0.05 225); display:flex; align-items:center; justify-content:center; color:oklch(85% 0.05 205); margin:0 auto 16px;">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"></path><path d="M9 12l2 2 4-4"></path></svg>
@@ -402,8 +402,8 @@
   </section>
 
   <!-- PERSONALIZACION -->
-  <section class="bp-section" style="padding:130px 64px;">
-    <div class="bp-grid-2" style="max-width:1200px; margin:0 auto; align-items:center; gap:72px;">
+  <section class="bp-section" style="padding:clamp(60px,13vw,130px) 64px;">
+    <div class="bp-grid-2" style="max-width:1200px; margin:0 auto; align-items:center; gap:clamp(36px,8vw,72px);">
       <div>
         <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand);">100% adaptable a tu óptica</span>
         <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.4vw,40px); color:var(--ink); letter-spacing:-0.01em; margin:14px 0 0;">Con tu marca, no con la nuestra</h2>
@@ -431,7 +431,7 @@
   </section>
 
   <!-- ROI -->
-  <section class="bp-section" style="padding:130px 64px;">
+  <section class="bp-section" style="padding:clamp(60px,13vw,130px) 64px;">
     <div style="max-width:760px; margin:0 auto; text-align:center;">
       <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); letter-spacing:-0.01em; margin:0;">Menos tiempo redactando, más consultas en la agenda</h2>
       <p style="font-size:17px; line-height:1.7; color:var(--ink-soft); margin:18px auto 0; max-width:600px;">El tiempo que un optómetra deja de gastar transcribiendo una historia a mano es tiempo que puede dedicar al siguiente paciente — o a cerrar la jornada más temprano.</p>
@@ -443,14 +443,14 @@
   </section>
 
   <!-- PLANES -->
-  <section id="planes" class="bp-section" style="background:var(--bg-alt); padding:130px 64px 70px;">
+  <section id="planes" class="bp-section" style="background:var(--bg-alt); padding:clamp(60px,13vw,130px) 64px 70px;">
     <div style="max-width:720px; margin:0 auto; text-align:center;">
       <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand);">Planes</span>
       <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); margin:14px 0 0; letter-spacing:-0.01em;">Un plan para cada tamaño de óptica</h2>
       <p style="font-size:16px; line-height:1.7; color:var(--ink-soft); margin-top:16px;">Precios en dólares, pensados para toda Suramérica y Centroamérica. Escalas con el tamaño de tu equipo, no con el número de pacientes que atiendes.</p>
     </div>
 
-    <div class="bp-grid-3" style="max-width:1100px; margin:64px auto 0; align-items:start;">
+    <div class="bp-grid-3" style="max-width:1100px; margin:clamp(36px,7vw,64px) auto 0; align-items:start;">
 
       <div style="background:var(--white); border:1px solid var(--line); border-top:4px solid var(--ink-faint); border-radius:18px; padding:32px 28px; display:flex; flex-direction:column; height:100%;">
         <div style="width:44px;height:44px;border-radius:12px;background:var(--bg-alt); display:flex; align-items:center; justify-content:center; color:var(--ink-soft); margin-bottom:16px;">
@@ -570,13 +570,13 @@
   </section>
 
   <!-- PROXIMAMENTE -->
-  <section class="bp-section" style="background:var(--bg-alt); padding:0px 64px 130px;">
+  <section class="bp-section" style="background:var(--bg-alt); padding:0px 64px clamp(64px,14vw,130px);">
     <div style="max-width:720px; margin:0 auto; text-align:center;">
       <span style="font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand);">Hacia dónde va Bioptica</span>
       <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,3.6vw,42px); color:var(--ink); margin:14px 0 0; letter-spacing:-0.01em;">Más allá de la historia clínica</h2>
       <p style="font-size:16px; line-height:1.7; color:var(--ink-soft); margin-top:16px;">Estamos construyendo para que tu óptica no solo registre mejor — también venda más y pierda menos tiempo coordinando con laboratorios.</p>
     </div>
-    <div class="bp-grid-2" style="max-width:920px; margin:56px auto 0; gap:28px;">
+    <div class="bp-grid-2" style="max-width:920px; margin:clamp(32px,7vw,56px) auto 0; gap:28px;">
       <div style="background:var(--white); border:1.5px dashed var(--line); border-radius:16px; padding:26px;">
         <span style="display:inline-block; font-size:10px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-faint); background:var(--bg-alt); border:1px solid var(--line); padding:4px 10px; border-radius:999px;">Próximamente</span>
         <div style="width:44px;height:44px;border-radius:12px;background:var(--brand-light); display:flex; align-items:center; justify-content:center; color:var(--brand); margin:16px 0 14px;">
@@ -597,7 +597,7 @@
   </section>
 
   <!-- NOSOTROS -->
-  <section id="nosotros" class="bp-section" style="background:var(--bg-alt); padding:110px 64px;">
+  <section id="nosotros" class="bp-section" style="background:var(--bg-alt); padding:clamp(56px,11vw,110px) 64px;">
     <div style="max-width:720px; margin:0 auto; text-align:center;">
       <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(26px,3.2vw,36px); color:var(--ink); letter-spacing:-0.01em; margin:0;">Detrás de Bioptica</h2>
       <p style="font-size:16px; line-height:1.75; color:var(--ink-soft); margin-top:18px;">Bioptica está construida por un equipo que trabaja de cerca con procesos de auditoría médica y marketing en salud en Colombia, y que ve todos los días el mismo problema en las ópticas: perder consultas por exceso de papeleo. Por eso lo diseñamos primero para el optómetra, no para el formulario.</p>
@@ -605,7 +605,7 @@
   </section>
 
   <!-- CTA FINAL -->
-  <section id="contacto" class="bp-section" style="background:var(--brand); padding:130px 64px; text-align:center; color:var(--white);">
+  <section id="contacto" class="bp-section" style="background:var(--brand); padding:clamp(60px,13vw,130px) 64px; text-align:center; color:var(--white);">
     <h2 style="font-family:'Newsreader',serif; font-weight:600; font-size:clamp(30px,4vw,48px); letter-spacing:-0.01em; margin:0 auto; max-width:680px;">Más consultas. Menos papeleo. Así de simple.</h2>
     <p style="font-size:17px; line-height:1.7; color:oklch(88% 0.03 210); margin:18px auto 0; max-width:560px;">Agenda una demo y compruébalo tú mismo: una consulta completa, firmada y enviada, en el tiempo que toma explicarla.</p>
     <div style="margin-top:36px;">
